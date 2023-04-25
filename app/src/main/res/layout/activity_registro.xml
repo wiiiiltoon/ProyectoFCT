@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Registro"
+    android:background="@color/azulFondo">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:padding="40dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/titulo"
+            android:textColor="@color/titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:inputType="text"
+            android:textStyle="bold"
+            android:elevation="50dp"
+            android:text="Creación de usuario"
+            android:textSize="30dp" />
+        <EditText
+            android:id="@+id/campoNombre"
+            android:layout_below="@id/titulo"
+            android:layout_width="match_parent"
+            android:drawableStart="@drawable/nombre"
+            android:drawablePadding="12dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:hint="Nombre completo"
+            android:background="@drawable/contenedor_campos"
+            android:inputType="text" />
+
+
+        <EditText
+            android:id="@+id/campoCentro"
+            android:layout_width="match_parent"
+            android:drawablePadding="12dp"
+            android:drawableStart="@drawable/colegio"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/campoNombre"
+            android:layout_marginTop="20dp"
+            android:hint="Centro docente"
+            android:background="@drawable/contenedor_campos"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/campoUsuario"
+            android:drawableStart="@drawable/user"
+            android:drawablePadding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/campoCentro"
+            android:background="@drawable/contenedor_campos"
+            android:layout_marginTop="20dp"
+            android:hint="Nombre de usuario"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/campoContraseña"
+            android:layout_width="match_parent"
+            android:drawablePadding="12dp"
+            android:drawableStart="@drawable/pass"
+            android:layout_height="wrap_content"
+            android:background="@drawable/contenedor_campos"
+            android:layout_below="@id/campoUsuario"
+            android:layout_marginTop="20dp"
+            android:hint="Contraseña"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/campoModiContraseña"
+            android:layout_width="match_parent"
+            android:background="@drawable/contenedor_campos"
+            android:drawablePadding="12dp"
+            android:drawableStart="@drawable/repass"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/campoContraseña"
+            android:layout_marginTop="20dp"
+            android:hint="Confirmar contraseña"
+            android:inputType="textPassword" />
+        <CheckBox
+            android:id="@+id/checkMostrarContraseña"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:text="Mostrar contraseña"
+            android:checked="false"
+            android:layout_below="@id/campoModiContraseña"/>
+
+        <Button
+            android:id="@+id/botonRegistro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/fraseIniciarSesion"
+            android:layout_marginTop="80dp"
+            android:text="Registrarse"
+            android:background="@drawable/botones"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            />
+
+        <TextView
+            android:id="@+id/fraseIniciarSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="¿Tienes cuenta? "
+            android:textColorLink="#0E529E"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            />
+
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
