@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InicioSesion">
+    tools:context=".InicioSesion"
+    android:background="@color/azulFondo">>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,11 +14,11 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="290dp"
-            android:layout_height="250dp"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="375dp"
+            android:layout_height="315dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="10dp"
             android:src="@drawable/logo" />
 
         <EditText
@@ -26,9 +27,12 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/logo"
-            android:layout_marginTop="40dp"
-            android:hint="Username"
-            android:inputType="text" />
+            android:hint="Usuario"
+            android:inputType="text"
+            android:drawableStart="@drawable/user"
+            android:drawablePadding="12dp"
+            android:background="@drawable/contenedor_campos"/>
+
 
         <EditText
             android:id="@+id/campoContraseña"
@@ -38,8 +42,11 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:hint="Password"
-            android:inputType="textPassword" />
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:drawableStart="@drawable/pass"
+            android:drawablePadding="12dp"
+            android:background="@drawable/contenedor_campos"/>
 
         <Button
             android:id="@+id/botonLogin"
@@ -48,7 +55,13 @@
             android:layout_below="@id/campoContraseña"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="Login" />
+
+            android:background="@drawable/botones"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:text="Iniciar sesión"
+            />
 
         <Button
             android:id="@+id/botonRegistro"
@@ -57,7 +70,12 @@
             android:layout_below="@id/botonLogin"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="Register" />
+            android:background="@drawable/botones"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:text="Registrarse"
+            />
 
 
     </RelativeLayout>
