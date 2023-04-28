@@ -22,12 +22,12 @@
             android:src="@drawable/logo" />
 
         <EditText
-            android:id="@+id/campoUsuario"
+            android:id="@+id/campoCorreo"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/logo"
-            android:hint="Usuario"
+            android:hint="Correo electronico"
             android:inputType="text"
             android:drawableStart="@drawable/user"
             android:drawablePadding="12dp"
@@ -38,7 +38,7 @@
             android:id="@+id/campoContraseña"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/campoUsuario"
+            android:layout_below="@id/campoCorreo"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
@@ -57,11 +57,11 @@
             android:layout_marginTop="20dp"
 
             android:background="@drawable/botones"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textAllCaps="false"
+            android:onClick="iniciarSesion"
             android:text="Iniciar sesión"
-            />
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/botonRegistro"

@@ -55,15 +55,15 @@
             android:inputType="text" />
 
         <EditText
-            android:id="@+id/campoUsuario"
-            android:drawableStart="@drawable/user"
+            android:id="@+id/campoCorreo"
+            android:drawableStart="@drawable/correo"
             android:drawablePadding="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/campoCentro"
             android:background="@drawable/contenedor_campos"
             android:layout_marginTop="20dp"
-            android:hint="Nombre de usuario"
+            android:hint="Correo electronico"
             android:inputType="text" />
 
         <EditText
@@ -73,13 +73,13 @@
             android:drawableStart="@drawable/pass"
             android:layout_height="wrap_content"
             android:background="@drawable/contenedor_campos"
-            android:layout_below="@id/campoUsuario"
+            android:layout_below="@id/campoCorreo"
             android:layout_marginTop="20dp"
             android:hint="Contraseña"
             android:inputType="textPassword" />
 
         <EditText
-            android:id="@+id/campoModiContraseña"
+            android:id="@+id/campoConfirmarContraseña"
             android:layout_width="match_parent"
             android:background="@drawable/contenedor_campos"
             android:drawablePadding="12dp"
@@ -97,7 +97,7 @@
 
             android:text="Mostrar contraseña"
             android:checked="false"
-            android:layout_below="@id/campoModiContraseña"/>
+            android:layout_below="@id/campoConfirmarContraseña"/>
 
         <Button
             android:id="@+id/botonRegistro"
@@ -105,12 +105,12 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/fraseIniciarSesion"
             android:layout_marginTop="80dp"
-            android:text="Registrarse"
             android:background="@drawable/botones"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
+            android:onClick="RegistrarUsuario"
+            android:text="Registrarse"
             android:textAllCaps="false"
-            />
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/fraseIniciarSesion"

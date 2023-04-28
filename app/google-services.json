@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "755193156055",
+    "project_id": "proyecto-fct-38132",
+    "storage_bucket": "proyecto-fct-38132.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755193156055:android:67d005e6951e9c2d137b92",
+        "android_client_info": {
+          "package_name": "com.example.aplicaciongestindealumnos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "755193156055-5hnfgsgko3j3o43fm6a84d99h1526au5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4GaZ7eE5b4WPupllOCPUbL3mvmDpIEqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "755193156055-5hnfgsgko3j3o43fm6a84d99h1526au5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
