@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".principal"
+    android:background="@color/azulFondo">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="40dp"
+        tools:layout_editor_absoluteX="33dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Bienvenido/a"
+            android:textColor="@color/titulo"
+
+            android:textSize="40dp" />
+
+        <TextView
+            android:id="@+id/datoNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titulo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Nombre: Lorenzo Martinez"
+            android:textColor="@color/titulo"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/datoCentro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/datoNombre"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="Centro: IES Juan Carlos I"
+            android:textColor="@color/titulo"
+            android:textSize="20dp" />
+
+
+        <Button
+
+            android:id="@+id/botonConsulta"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/datoCentro"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/botones"
+            android:text="Consulta de alumnos"
+            android:textAllCaps="false"
+            android:textColor="@color/blanco"
+            android:textSize="16dp" />
+
+        <Button
+            android:id="@+id/botonRegistro"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/botonConsulta"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/botones"
+            android:text="Registro de alumnos"
+            android:textAllCaps="false"
+            android:textColor="@color/blanco"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/botonCalificaciones"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/botonRegistro"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/botones"
+            android:text="Calificaciones"
+            android:textAllCaps="false"
+            android:textColor="@color/blanco"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/botonAusencias"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/botonCalificaciones"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/botones"
+            android:text="Ausencias"
+            android:textAllCaps="false"
+            android:textColor="@color/blanco"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/botonCalendario"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/botonAusencias"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/botones"
+            android:text="Calendario"
+            android:textAllCaps="false"
+            android:textColor="@color/blanco"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/botonInforme"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/informe"
+            android:paddingHorizontal="20dp"
+            android:text="Generar informe"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/botonCalendario"
+            android:textAllCaps="false"
+            android:textColor="@color/blanco"
+            android:textSize="16sp" />
+        <Button
+            android:id="@+id/cerrarSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/cerrarsession"
+            android:paddingHorizontal="20dp"
+            android:text="Cerrar sesión"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="10dp"
+            android:textAllCaps="false"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/blanco"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

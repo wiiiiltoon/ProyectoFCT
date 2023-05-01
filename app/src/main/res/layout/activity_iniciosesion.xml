@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InicioSesion"
+    tools:context=".inicioSesion"
     android:background="@color/azulFondo">>
 
     <RelativeLayout
@@ -55,7 +55,6 @@
             android:layout_below="@id/campoContraseña"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-
             android:background="@drawable/botones"
             android:onClick="iniciarSesion"
             android:text="Iniciar sesión"
