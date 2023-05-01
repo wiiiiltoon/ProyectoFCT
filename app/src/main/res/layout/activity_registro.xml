@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,11 +23,10 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:inputType="text"
             android:textStyle="bold"
             android:elevation="50dp"
-            android:text="Creación de usuario"
-            android:textSize="30dp" />
+            android:text="@string/creacion_de_usuario"
+            android:textSize="30sp" />
         <EditText
             android:id="@+id/campoNombre"
             android:layout_below="@id/titulo"
@@ -37,9 +35,10 @@
             android:drawablePadding="12dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:hint="Nombre completo"
+            android:hint="@string/nombre_completo"
             android:background="@drawable/contenedor_campos"
-            android:inputType="text" />
+            android:inputType="text"
+            android:autofillHints="name" />
 
 
         <EditText
@@ -50,9 +49,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/campoNombre"
             android:layout_marginTop="20dp"
-            android:hint="Centro docente"
+            android:hint="@string/centro_docente"
             android:background="@drawable/contenedor_campos"
-            android:inputType="text" />
+            android:inputType="text"
+            android:autofillHints="school-name"/>
 
         <EditText
             android:id="@+id/campoCorreo"
@@ -63,11 +63,12 @@
             android:layout_below="@id/campoCentro"
             android:background="@drawable/contenedor_campos"
             android:layout_marginTop="20dp"
-            android:hint="Correo electronico"
-            android:inputType="text" />
+            android:hint="@string/correo_electronico"
+            android:inputType="text"
+            android:autofillHints="emailAddress" />
 
         <EditText
-            android:id="@+id/campoContraseña"
+            android:id="@+id/campoContrasena"
             android:layout_width="match_parent"
             android:drawablePadding="12dp"
             android:drawableStart="@drawable/pass"
@@ -75,28 +76,30 @@
             android:background="@drawable/contenedor_campos"
             android:layout_below="@id/campoCorreo"
             android:layout_marginTop="20dp"
-            android:hint="Contraseña"
-            android:inputType="textPassword" />
+            android:hint="@string/contrasena"
+            android:inputType="textPassword"
+            android:autofillHints="password" />
 
         <EditText
-            android:id="@+id/campoConfirmarContraseña"
+            android:id="@+id/campoConfirmarContrasena"
             android:layout_width="match_parent"
             android:background="@drawable/contenedor_campos"
             android:drawablePadding="12dp"
             android:drawableStart="@drawable/repass"
             android:layout_height="wrap_content"
-            android:layout_below="@id/campoContraseña"
+            android:layout_below="@id/campoContrasena"
             android:layout_marginTop="20dp"
-            android:hint="Confirmar contraseña"
-            android:inputType="textPassword" />
+            android:hint="@string/confirmar_contrasena"
+            android:inputType="textPassword"
+            android:autofillHints="password" />
         <CheckBox
-            android:id="@+id/checkMostrarContraseña"
+            android:id="@+id/checkMostrarContrasena"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Mostrar contraseña"
+            android:text="@string/mostrar_contrasena"
             android:checked="false"
-            android:layout_below="@id/campoConfirmarContraseña"/>
+            android:layout_below="@id/campoConfirmarContrasena"/>
 
         <Button
             android:id="@+id/botonRegistro"
@@ -106,7 +109,7 @@
             android:layout_marginTop="80dp"
             android:background="@drawable/botones"
             android:onClick="RegistrarUsuario"
-            android:text="Registrarse"
+            android:text="@string/registrarse"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="16sp" />
@@ -119,7 +122,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:text="¿Tienes cuenta? "
+            android:text="@string/tienes_cuenta"
             android:textColorLink="#0E529E"
             android:textColor="@android:color/black"
             android:textSize="16sp"

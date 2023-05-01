@@ -1,3 +1,25 @@
 <resources>
-    <string name="app_name">AplicacionGestión de alumnos</string>
+    <string name="gestion_alumnos">Gestión de alumnos</string>
+    <string name="bienvenido">Bienvenido/a</string>
+    <string name="consulta_alumnos">Consulta de alumnos</string>
+    <string name="registro_alumnos">Registro de alumnos</string>
+    <string name="calificaciones">Calificaciones</string>
+    <string name="ausencia">Ausencias</string>
+    <string name="calendario">Calendario</string>
+    <string name="generar_informe">Generar informe</string>
+    <string name="creacion_de_usuario">Creación de usuario</string>
+    <string name="nombre_completo">Nombre completo</string>
+    <string name="centro_docente">Centro docente</string>
+    <string name="correo_electronico">Correo electrónico</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="confirmar_contrasena">Confirmar contraseña</string>
+    <string name="mostrar_contrasena">Mostrar contraseña</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="tienes_cuenta">"¿Tienes cuenta? "</string>
+    <string name="cerrar_sesion">Cerrar sesión</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
+    <string name="nombre_mas_string">Nombre: %1$s</string>
+    <string name="centro_mas_string">Centro: %1$s</string>
+    <string name="logo_de_aplicacion">Logo de aplicacion</string>
+
 </resources>

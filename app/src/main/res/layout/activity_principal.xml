@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,10 +19,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Bienvenido/a"
+            android:text="@string/bienvenido"
             android:textColor="@color/titulo"
-
-            android:textSize="40dp" />
+            android:textSize="40sp" />
 
         <TextView
             android:id="@+id/datoNombre"
@@ -32,9 +30,8 @@
             android:layout_below="@id/titulo"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="Nombre: Lorenzo Martinez"
             android:textColor="@color/titulo"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/datoCentro"
@@ -43,9 +40,8 @@
             android:layout_below="@id/datoNombre"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
-            android:text="Centro: IES Juan Carlos I"
             android:textColor="@color/titulo"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
 
         <Button
@@ -57,10 +53,10 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
             android:background="@drawable/botones"
-            android:text="Consulta de alumnos"
+            android:text="@string/consulta_alumnos"
             android:textAllCaps="false"
             android:textColor="@color/blanco"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/botonRegistro"
@@ -70,7 +66,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
-            android:text="Registro de alumnos"
+            android:text="@string/registro_alumnos"
             android:textAllCaps="false"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
@@ -83,7 +79,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
-            android:text="Calificaciones"
+            android:text="@string/calificaciones"
             android:textAllCaps="false"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
@@ -96,7 +92,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
-            android:text="Ausencias"
+            android:text="@string/ausencia"
             android:textAllCaps="false"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
@@ -109,7 +105,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
-            android:text="Calendario"
+            android:text="@string/calendario"
             android:textAllCaps="false"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
@@ -121,7 +117,7 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/informe"
             android:paddingHorizontal="20dp"
-            android:text="Generar informe"
+            android:text="@string/generar_informe"
             android:layout_marginTop="30dp"
             android:layout_below="@id/botonCalendario"
             android:textAllCaps="false"
@@ -139,12 +135,10 @@
             android:background="@drawable/cerrarsession"
             android:onClick="cerrarSesion"
             android:paddingHorizontal="20dp"
-            android:text="Cerrar sesión"
+            android:text="@string/cerrar_sesion"
             android:textAllCaps="false"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
     </RelativeLayout>
-
-    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
