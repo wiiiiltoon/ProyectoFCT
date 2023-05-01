@@ -3,8 +3,11 @@ package com.example.aplicaciongestindealumnos;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,17 +28,29 @@ public class inicioSesion extends AppCompatActivity {
         mContrasena = findViewById(R.id.campoContrasena);
         inicioSesion = findViewById(R.id.botonLogin);
         registrarse = findViewById(R.id.botonRegistro);
+        CheckBox mostrarContrasena = findViewById(R.id.checkMostrarContrasena);
 
-        correo = mCorreo.getText().toString().trim();
-        contrasena = mContrasena.getText().toString().trim();
         registrarse.setOnClickListener(view -> {
             Intent i = new Intent(com.example.aplicaciongestindealumnos.inicioSesion.this, Registro.class);
             startActivity(i);
         });
 
+
+        // Checkbox mostrar contraseña
+        mostrarContrasena.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                //Mostrar contraseña
+                mContrasena.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            } else {
+                //Ocultar contraseña
+                mContrasena.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            }
+        });
     }
 
     public void iniciarSesion(View view) {
+        correo = mCorreo.getText().toString().trim();
+        contrasena = mContrasena.getText().toString().trim();
 
         mAuth.signInWithEmailAndPassword(correo, contrasena)
                 .addOnCompleteListener(this, task -> {
