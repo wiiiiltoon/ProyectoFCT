@@ -2,6 +2,8 @@ package com.example.aplicaciongestindealumnos;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -65,14 +67,31 @@ public class principal extends AppCompatActivity {
             }
         });
 
-        cerrarSesion.setOnClickListener(new View.OnClickListener() {
+    }
+
+
+    public void cerrarSesion(View view){
+        mostrarCerrarSesion();
+    }
+    @Override
+    public void onBackPressed() {
+        mostrarCerrarSesion();
+    }
+
+    private void mostrarCerrarSesion() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Cerrar sesión");
+        builder.setMessage("¿Estás seguro de que quieres cerrar sesión?");
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(DialogInterface dialog, int which) {
                 mAuth.signOut();
                 Intent i = new Intent(principal.this, inicioSesion.class);
                 startActivity(i);
                 finish();
             }
         });
+        builder.setNegativeButton("No", null);
+        builder.show();
     }
 }

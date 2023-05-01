@@ -42,6 +42,7 @@ public class inicioSesion extends AppCompatActivity {
         });
 
     }
+
     public void iniciarSesion(View view) {
 
         mAuth.signInWithEmailAndPassword(correo.getText().toString().trim(),contraseña.getText().toString().trim())
