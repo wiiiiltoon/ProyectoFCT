@@ -63,6 +63,10 @@ public class principal extends AppCompatActivity {
     public void cerrarSesion(View view) {
         mostrarCerrarSesion();
     }
+    public void registroAlumnos(View view) {
+        Intent i = new Intent(principal.this,registroAlumnos.class);
+        startActivity(i);
+    }
 
     @Override
     public void onBackPressed() {

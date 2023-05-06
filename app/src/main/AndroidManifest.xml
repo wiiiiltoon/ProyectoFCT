@@ -15,6 +15,9 @@
         android:theme="@style/Theme.AplicacionGestiónDeAlumnos"
         tools:targetApi="31">
         <activity
+            android:name=".registroAlumnos"
+            android:exported="false" />
+        <activity
             android:name=".principal"
             android:exported="false" />
         <activity

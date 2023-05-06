@@ -8,7 +8,7 @@
     <string name="calendario">Calendario</string>
     <string name="generar_informe">Generar informe</string>
     <string name="creacion_de_usuario">Creación de usuario</string>
-    <string name="nombre_completo">Nombre completo</string>
+    <string name="nombre_completo">Nombre y apellidos</string>
     <string name="centro_docente">Centro docente</string>
     <string name="correo_electronico">Correo electrónico</string>
     <string name="contrasena">Contraseña</string>
@@ -21,5 +21,7 @@
     <string name="nombre_mas_string">Nombre: %1$s</string>
     <string name="centro_mas_string">Centro: %1$s</string>
     <string name="logo_de_aplicacion">Logo de aplicacion</string>
+    <string name="anadir">Añadir</string>
+    <string name="eliminar">Eliminar</string>
 
 </resources>

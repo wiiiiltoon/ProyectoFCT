@@ -66,6 +66,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
+            android:onClick="registroAlumnos"
             android:text="@string/registro_alumnos"
             android:textAllCaps="false"
             android:textColor="@color/blanco"
