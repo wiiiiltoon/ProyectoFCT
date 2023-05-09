@@ -1,6 +1,7 @@
 package com.example.aplicaciongestindealumnos;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class Adaptador extends BaseAdapter {
         TextView nombre = (TextView) convertView.findViewById(R.id.nombre);
         TextView curso = (TextView) convertView.findViewById(R.id.curso);
 
-        foto.setImageResource(item.getFoto());
+        foto.setImageDrawable(item.getFoto().getDrawable());
         nombre.setText(item.getNombre());
         curso.setText(item.getCurso());
         return convertView;

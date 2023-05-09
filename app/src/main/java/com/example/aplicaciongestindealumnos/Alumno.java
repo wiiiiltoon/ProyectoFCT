@@ -1,18 +1,20 @@
 package com.example.aplicaciongestindealumnos;
 
+import android.widget.ImageView;
+
 public class Alumno {
 
-    private int foto;
+    private ImageView foto;
     private String nombre;
     private String curso;
 
-    public Alumno(int foto,String nombre, String curso){
+    public Alumno(ImageView foto,String nombre, String curso){
         this.foto = foto;
         this.nombre = nombre;
         this.curso = curso;
     }
 
-    public int getFoto() {
+    public ImageView getFoto() {
         return foto;
     }
 
