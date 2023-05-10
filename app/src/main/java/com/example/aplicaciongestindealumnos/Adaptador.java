@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class Adaptador extends BaseAdapter {
@@ -50,7 +52,9 @@ public class Adaptador extends BaseAdapter {
         TextView nombre = (TextView) convertView.findViewById(R.id.nombre);
         TextView curso = (TextView) convertView.findViewById(R.id.curso);
 
-        foto.setImageDrawable(item.getFoto().getDrawable());
+        Glide.with(context)
+                .load(item.getUrlFoto())
+                .into(foto);
         nombre.setText(item.getNombre());
         curso.setText(item.getCurso());
         return convertView;

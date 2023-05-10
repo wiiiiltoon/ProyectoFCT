@@ -6,16 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,54 +18,87 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class registroAlumnos extends AppCompatActivity {
     FirebaseFirestore db;
-    ArrayList<Alumno> alumnos;
-    ListView listaAlumnos;
+    FirebaseStorage storage;
+    CollectionReference alumnosRefDB;
+    Uri uriElegidaCliente;
+    StorageReference storageRef;
+    ArrayList<Alumno> listaAlumnos;
+    ListView listViewAlumnos;
     Adaptador adaptador;
     ImageView imagenSeleccionada;
     String emailDB;
-    DocumentReference referenciaDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro_alumnos);
 
-        db = FirebaseFirestore.getInstance();
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        //Obtenemos el email
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            emailDB = currentUser.getEmail();
-            //hacemos referencia a la collecion
-            referenciaDB = db.collection("users").document(emailDB);
-        } else {
-            Log.w("principal", "El usuario actual es nulo");
-        }
-        alumnos = new ArrayList<>();
-        listaAlumnos = findViewById(R.id.listaAlumnos);
+        listaAlumnos = new ArrayList<>();
+        listViewAlumnos = findViewById(R.id.listaAlumnos);
+
+        Intent i = getIntent();
+        emailDB = i.getStringExtra("correoUsuario");
+
+
+        //llamos al singleton para instanciar
+        db = SingletonFirebase.getFireBase();
+
+        storage = SingletonFirebase.getStorage();
+        storageRef = SingletonFirebase.getReferenciaFotos();
+
+
+        // Crear una instancia del adaptador con la lista de alumnos traida desde principal
+        listaAlumnos = i.getParcelableArrayListExtra("listaAlumnos");
+        adaptador = new Adaptador(registroAlumnos.this, listaAlumnos);
+        listViewAlumnos.setAdapter(adaptador);
+        storageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+            @Override
+            public void onSuccess(StorageMetadata storageMetadata) {
+                // La referencia ya existe, no hay nada más que hacer
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // La referencia no existe, intenta crearla
+                if (exception instanceof StorageException && ((StorageException) exception).getErrorCode() == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                    storageRef.putBytes(new byte[]{0}).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // La referencia se creó exitosamente
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // No se pudo crear la referencia
+                        }
+                    });
+                }
+            }
+        });
 
         // En caso de hacer clic en un elemento de la lista
-        listaAlumnos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewAlumnos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Muestra un cuadro de diálogo preguntando si se desea eliminar el alumno
@@ -85,6 +113,7 @@ public class registroAlumnos extends AppCompatActivity {
                         Alumno alumnoSeleccionado = (Alumno) adaptador.getItem(position);
                         adaptador.remove(alumnoSeleccionado);
                         adaptador.notifyDataSetChanged();
+
                     }
                 });
 
@@ -98,6 +127,7 @@ public class registroAlumnos extends AppCompatActivity {
                 builder.show();
             }
         });
+        alumnosRefDB = db.collection("users").document(emailDB).collection("alumnos");
     }
 
     public void anadirAlumno(View view) {
@@ -135,10 +165,12 @@ public class registroAlumnos extends AppCompatActivity {
         layoutCampos.setPadding(50, 50, 50, 50);
 
         // Agregamos los componentes al layout
+        uriElegidaCliente = Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.logo);
         imagenSeleccionada = new ImageView(registroAlumnos.this);
         imagenSeleccionada.setImageResource(R.drawable.logo);
         imagenSeleccionada.setLayoutParams(new LinearLayout.LayoutParams(500, 500));
         imagenSeleccionada.setAdjustViewBounds(true);
+
 
         layoutCampos.addView(imagenSeleccionada);
         layoutCampos.addView(botonImagen);
@@ -169,32 +201,66 @@ public class registroAlumnos extends AppCompatActivity {
                 String curso = anio + "º " + nivelEducativo;
 
                 // Crear una instancia de Alumno y agregarlo a la lista
-                alumnos.add(new Alumno(imagenSeleccionada, nombre, curso));
+                listaAlumnos.add(new Alumno(uriElegidaCliente, nombre, curso));
 
                 // Crear una instancia del adaptador con la lista de alumnos y establecerlo en la lista
-                adaptador = new Adaptador(registroAlumnos.this, alumnos);
-                listaAlumnos.setAdapter(adaptador);
+                adaptador = new Adaptador(registroAlumnos.this, listaAlumnos);
+                listViewAlumnos.setAdapter(adaptador);
 
-                /*//Agregamos a firebase
-                Map<String, Object> nuevoAlumnoMap = new HashMap<>();
-                nuevoAlumnoMap.put("nombre", nombre);
-                nuevoAlumnoMap.put("curso", curso);
 
-                // Añadir el nuevo alumno a la colección
-                referenciaDB.collection("alumnos").add(nuevoAlumnoMap)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                // Crear una referencia al archivo en Firebase Storage
+                Date date = new Date();
+                String timestamp = String.valueOf(date.getTime());
+                String nombreImagen = "alumno_" + timestamp + ".jpg";
+                StorageReference imageRef = storageRef.child(nombreImagen);
+
+                // Subir la imagen a Firebase Storage
+                UploadTask uploadTask = imageRef.putFile(uriElegidaCliente);
+
+                // Manejar el resultado de la carga
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // La imagen se ha cargado con éxito
+                        // Obtener la URL de descarga de la imagen
+                        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(getApplicationContext(), "Alumno agregado con exito con ID: ", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getApplicationContext(), "Error al agregar alumno a Firestore", Toast.LENGTH_SHORT).show();
+                            public void onSuccess(Uri downloadUrl) {
+                                // La URL de descarga de la imagen está disponible
+                                String urlImagen = downloadUrl.toString();
+                                // Generamos una nueva ID
+                                String nuevoID = alumnosRefDB.document().getId();
+                                //Creamos el map
+                                Map<String, Object> nuevoAlumnoMap = new HashMap<>();
+                                nuevoAlumnoMap.put("nombre", nombre);
+                                nuevoAlumnoMap.put("curso", curso);
+                                nuevoAlumnoMap.put("url_imagen", urlImagen);
 
+                                // Añadir el nuevo alumno a la colección
+                                alumnosRefDB.document(nuevoID).set(nuevoAlumnoMap)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(getApplicationContext(), "Alumno agregado con exito con ID: ", Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getApplicationContext(), "Error al agregar alumno a Firestore", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
                             }
-                        });*/
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Se produjo un error al cargar la imagen
+                        // Manejar el error aquí
+                    }
+                });
             }
         });
 
@@ -212,8 +278,8 @@ public class registroAlumnos extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            Uri selectedImage = data.getData();
-            imagenSeleccionada.setImageURI(selectedImage);
+            uriElegidaCliente = data.getData();
+            imagenSeleccionada.setImageURI(uriElegidaCliente);
         }
     }
 }

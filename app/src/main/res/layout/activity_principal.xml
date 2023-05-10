@@ -53,6 +53,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
             android:background="@drawable/botones"
+            android:onClick="consultarAlumnos"
             android:text="@string/consulta_alumnos"
             android:textAllCaps="false"
             android:textColor="@color/blanco"
