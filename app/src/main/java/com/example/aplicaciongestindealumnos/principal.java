@@ -91,12 +91,13 @@ public class principal extends AppCompatActivity {
                     // Recorrer los documentos y obtener los datos de cada alumno
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Obtener los datos del documento y convertirlos a un objeto Alumno
+                        String idFireBase = document.getId();
                         String nombre = document.getString("nombre");
                         String curso = document.getString("curso");
                         String urlImagen = document.getString("url_imagen");
                         Uri uriUrlImagen = Uri.parse(urlImagen);
 
-                        listaAlumnos.add(new Alumno(uriUrlImagen, nombre, curso));
+                        listaAlumnos.add(new Alumno(uriUrlImagen, nombre, curso,idFireBase));
                     }
                 }
 

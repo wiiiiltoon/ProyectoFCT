@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
@@ -75,7 +77,6 @@ public class registroAlumnos extends AppCompatActivity {
         storageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
             @Override
             public void onSuccess(StorageMetadata storageMetadata) {
-                // La referencia ya existe, no hay nada más que hacer
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -109,10 +110,26 @@ public class registroAlumnos extends AppCompatActivity {
                 builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Obtiene el elemento seleccionado y lo elimina del array y del adaptador
                         Alumno alumnoSeleccionado = (Alumno) adaptador.getItem(position);
-                        adaptador.remove(alumnoSeleccionado);
-                        adaptador.notifyDataSetChanged();
+                        String idAlumno = alumnoSeleccionado.getIdFireBase();
+                        DocumentReference alumnoRef = db.collection("users").document(emailDB).collection("alumnos").document(idAlumno);
+                        alumnoRef.delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(getApplicationContext(), "Agregado correctamente", Toast.LENGTH_SHORT).show();
+
+                                        // Obtiene el elemento seleccionado y lo elimina del array y del adaptador
+                                        adaptador.remove(alumnoSeleccionado);
+                                        adaptador.notifyDataSetChanged();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getApplicationContext(), "No se pudo eliminar el alumno", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
                     }
                 });
@@ -194,73 +211,76 @@ public class registroAlumnos extends AppCompatActivity {
         builder.setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                String nombre = campoNombre.getText().toString().trim();
-                String anio = campoAñoCurso.getText().toString().trim();
+                //Recogemos los datos
+                String nombre = campoNombre.getText().toString().replaceAll("\\s+", " ").trim();
+                String anio = campoAñoCurso.getText().toString().replaceAll("\\s+", " ").trim();
+                String asignatura = campoAsignatura.getText().toString().replaceAll("\\s+", " ").trim();
                 String nivelEducativo = spinnerNivelEducativo.getSelectedItem().toString();
                 String curso = anio + "º " + nivelEducativo;
 
-                // Crear una instancia de Alumno y agregarlo a la lista
-                listaAlumnos.add(new Alumno(uriElegidaCliente, nombre, curso));
+                if(nombre.equals("")&&anio.equals("")&&asignatura.equals("")){
+                    Toast.makeText(getApplicationContext(), "Complete los campos requeridos", Toast.LENGTH_SHORT).show();
+                }else {
+                    //Generamos una nueva ID para la base de datos
+                    String nuevoID = alumnosRefDB.document().getId();
+                    // Crear una referencia al archivo en Firebase Storage
+                    Date date = new Date();
+                    String timestamp = String.valueOf(date.getTime());
+                    String nombreImagen = "alumno_" + timestamp + ".jpg";
+                    StorageReference imageRef = storageRef.child(nombreImagen);
 
-                // Crear una instancia del adaptador con la lista de alumnos y establecerlo en la lista
-                adaptador = new Adaptador(registroAlumnos.this, listaAlumnos);
-                listViewAlumnos.setAdapter(adaptador);
+                    // Subir la imagen a Firebase Storage
+                    UploadTask uploadTask = imageRef.putFile(uriElegidaCliente);
+
+                    // Manejar el resultado de la carga
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // La imagen se ha cargado con éxito
+                            imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri downloadUrl) {
+                                    // La URL de descarga de la imagen está disponible
+                                    String urlImagen = downloadUrl.toString();
 
 
-                // Crear una referencia al archivo en Firebase Storage
-                Date date = new Date();
-                String timestamp = String.valueOf(date.getTime());
-                String nombreImagen = "alumno_" + timestamp + ".jpg";
-                StorageReference imageRef = storageRef.child(nombreImagen);
+                                    //Creamos el map
+                                    Map<String, Object> nuevoAlumnoMap = new HashMap<>();
+                                    nuevoAlumnoMap.put("nombre", nombre);
+                                    nuevoAlumnoMap.put("curso", curso);
+                                    nuevoAlumnoMap.put("url_imagen", urlImagen);
 
-                // Subir la imagen a Firebase Storage
-                UploadTask uploadTask = imageRef.putFile(uriElegidaCliente);
+                                    // Añadir el nuevo alumno a la colección
+                                    alumnosRefDB.document(nuevoID).set(nuevoAlumnoMap)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    // Añadimos un alumno a la lista local
+                                                    listaAlumnos.add(new Alumno(uriElegidaCliente, nombre, curso,nuevoID));
 
-                // Manejar el resultado de la carga
-                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // La imagen se ha cargado con éxito
-                        // Obtener la URL de descarga de la imagen
-                        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri downloadUrl) {
-                                // La URL de descarga de la imagen está disponible
-                                String urlImagen = downloadUrl.toString();
-                                // Generamos una nueva ID
-                                String nuevoID = alumnosRefDB.document().getId();
-                                //Creamos el map
-                                Map<String, Object> nuevoAlumnoMap = new HashMap<>();
-                                nuevoAlumnoMap.put("nombre", nombre);
-                                nuevoAlumnoMap.put("curso", curso);
-                                nuevoAlumnoMap.put("url_imagen", urlImagen);
+                                                    // Crear una instancia del adaptador con la lista de alumnos y establecerlo en la lista
+                                                    adaptador = new Adaptador(registroAlumnos.this, listaAlumnos);
+                                                    listViewAlumnos.setAdapter(adaptador);
+                                                    Toast.makeText(getApplicationContext(), "Alumno agregado con exito", Toast.LENGTH_SHORT).show();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(getApplicationContext(), "Error al agregar alumno a Firestore", Toast.LENGTH_SHORT).show();
 
-                                // Añadir el nuevo alumno a la colección
-                                alumnosRefDB.document(nuevoID).set(nuevoAlumnoMap)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Toast.makeText(getApplicationContext(), "Alumno agregado con exito con ID: ", Toast.LENGTH_SHORT).show();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getApplicationContext(), "Error al agregar alumno a Firestore", Toast.LENGTH_SHORT).show();
-
-                                            }
-                                        });
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Se produjo un error al cargar la imagen
-                        // Manejar el error aquí
-                    }
-                });
+                                                }
+                                            });
+                                }
+                            });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error al subir la imagen", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
 

@@ -52,7 +52,7 @@ public class consultarAlumnos extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registro_alumnos);
+        setContentView(R.layout.activity_consultar_alumnos);
 
         listaAlumnos = new ArrayList<>();
         listViewAlumnos = findViewById(R.id.listaAlumnos);
