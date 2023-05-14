@@ -1,15 +1,10 @@
 package com.example.aplicaciongestindealumnos;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,6 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -204,6 +203,7 @@ public class registroAlumnos extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, 1);
+
             }
         });
 
@@ -218,9 +218,9 @@ public class registroAlumnos extends AppCompatActivity {
                 String nivelEducativo = spinnerNivelEducativo.getSelectedItem().toString();
                 String curso = anio + "º " + nivelEducativo;
 
-                if(nombre.equals("")&&anio.equals("")&&asignatura.equals("")){
+                if (nombre.equals("") && anio.equals("") && asignatura.equals("")) {
                     Toast.makeText(getApplicationContext(), "Complete los campos requeridos", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     //Generamos una nueva ID para la base de datos
                     String nuevoID = alumnosRefDB.document().getId();
                     // Crear una referencia al archivo en Firebase Storage
@@ -256,7 +256,7 @@ public class registroAlumnos extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     // Añadimos un alumno a la lista local
-                                                    listaAlumnos.add(new Alumno(uriElegidaCliente, nombre, curso,nuevoID));
+                                                    listaAlumnos.add(new Alumno(uriElegidaCliente, nombre, curso, nuevoID));
 
                                                     // Crear una instancia del adaptador con la lista de alumnos y establecerlo en la lista
                                                     adaptador = new Adaptador(registroAlumnos.this, listaAlumnos);
@@ -299,7 +299,41 @@ public class registroAlumnos extends AppCompatActivity {
 
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             uriElegidaCliente = data.getData();
+            Toast.makeText(getApplicationContext(), uriElegidaCliente.toString(), Toast.LENGTH_SHORT).show();
             imagenSeleccionada.setImageURI(uriElegidaCliente);
         }
     }
+
+    //Recorte de imagen cuando se selecciona una (proceso lento)
+    /* @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            Uri uri = data.getData();
+
+            // Configuramos uCrop
+            UCrop.Options options = new UCrop.Options();
+            options.setCompressionQuality(70);
+            options.setToolbarTitle("Recortar imagen");
+            options.setStatusBarColor(getResources().getColor(R.color.titulo));
+            options.setToolbarColor(getResources().getColor(R.color.azulFondo));
+            options.setActiveControlsWidgetColor(getResources().getColor(R.color.blanco));
+
+            // Iniciamos la actividad de uCrop
+            UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), "cropped")))
+                    .withAspectRatio(3, 4)
+                    .withOptions(options)
+                    .start(this);
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            uriElegidaCliente = UCrop.getOutput(data);
+
+            // Aquí puedes hacer algo con la imagen recortada, como subirla a Firebase Storage o mostrarla en una ImageView
+            imagenSeleccionada.setImageURI(uriElegidaCliente);
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            Throwable error = UCrop.getError(data);
+
+            // Aquí puedes manejar el error
+        }
+    }*/
 }

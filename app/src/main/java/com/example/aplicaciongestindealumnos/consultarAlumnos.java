@@ -1,25 +1,16 @@
 package com.example.aplicaciongestindealumnos;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,9 +23,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class consultarAlumnos extends AppCompatActivity {
@@ -101,31 +89,20 @@ public class consultarAlumnos extends AppCompatActivity {
         listViewAlumnos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Muestra un cuadro de diálogo preguntando si se desea eliminar el alumno
-                AlertDialog.Builder builder = new AlertDialog.Builder(consultarAlumnos.this);
-                builder.setTitle("Eliminar alumno");
-                builder.setMessage("¿Está seguro que desea eliminar este alumno?");
+                Alumno alumnoSeleccionado = listaAlumnos.get(position);
+                String nombreAlumno = alumnoSeleccionado.getNombre();
+                String cursoAlumno = alumnoSeleccionado.getCurso();
+                String idAlumno = alumnoSeleccionado.getIdFireBase();
+                Uri foto = alumnoSeleccionado.getUrlFoto();
 
-                builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Obtiene el elemento seleccionado y lo elimina del array y del adaptador
-                        Alumno alumnoSeleccionado = (Alumno) adaptador.getItem(position);
-                        adaptador.remove(alumnoSeleccionado);
-                        adaptador.notifyDataSetChanged();
-                        System.out.println(listaAlumnos);
 
-                    }
-                });
-
-                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();
+                Intent i = new Intent(consultarAlumnos.this,perfilAlumno.class);
+                i.putExtra("nombreAlumno", nombreAlumno);
+                i.putExtra("cursoAlumno",cursoAlumno);
+                i.putExtra("idAlumno",idAlumno);
+                i.putExtra("fotoAlumno",foto.toString());
+                startActivity(i);
+                Toast.makeText(getApplicationContext(), foto.toString(), Toast.LENGTH_SHORT).show();
             }
         });
         alumnosRefDB = db.collection("users").document(emailDB).collection("alumnos");

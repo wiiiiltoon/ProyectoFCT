@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/titulo"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:textColor="@color/titulo"
             android:textSize="20sp" />
 
@@ -55,7 +55,6 @@
             android:background="@drawable/botones"
             android:onClick="consultarAlumnos"
             android:text="@string/consulta_alumnos"
-            android:textAllCaps="false"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
 
@@ -69,46 +68,19 @@
             android:background="@drawable/botones"
             android:onClick="registroAlumnos"
             android:text="@string/registro_alumnos"
-            android:textAllCaps="false"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
 
+
         <Button
-            android:id="@+id/botonCalificaciones"
+            android:id="@+id/botonCalendario"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/botonRegistro"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
-            android:text="@string/calificaciones"
-            android:textAllCaps="false"
-            android:textColor="@color/blanco"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/botonAusencias"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/botonCalificaciones"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/botones"
-            android:text="@string/ausencia"
-            android:textAllCaps="false"
-            android:textColor="@color/blanco"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/botonCalendario"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/botonAusencias"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/botones"
             android:text="@string/calendario"
-            android:textAllCaps="false"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
 
@@ -122,7 +94,6 @@
             android:text="@string/generar_informe"
             android:layout_marginTop="30dp"
             android:layout_below="@id/botonCalendario"
-            android:textAllCaps="false"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
 

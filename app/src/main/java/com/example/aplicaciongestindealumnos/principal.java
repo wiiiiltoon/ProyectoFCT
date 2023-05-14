@@ -1,18 +1,16 @@
 package com.example.aplicaciongestindealumnos;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,10 +21,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -36,7 +30,7 @@ public class principal extends AppCompatActivity {
     DocumentReference referenciaCorreo;
     String emailDB;
     TextView datoNombre, datoCentro;
-    Button consulta, registro, calificaciones, ausencias, calendario, informe, cerrarSesion;
+    Button consulta, registro, calendario, informe, cerrarSesion;
     ArrayList<Alumno> listaAlumnos;
     CollectionReference alumnosRefDB;
 
@@ -47,8 +41,6 @@ public class principal extends AppCompatActivity {
 
         consulta = findViewById(R.id.botonConsulta);
         registro = findViewById(R.id.botonRegistro);
-        calificaciones = findViewById(R.id.botonCalificaciones);
-        ausencias = findViewById(R.id.botonAusencias);
         calendario = findViewById(R.id.botonCalendario);
         informe = findViewById(R.id.botonInforme);
         cerrarSesion = findViewById(R.id.cerrarSesion);
@@ -100,7 +92,6 @@ public class principal extends AppCompatActivity {
                         listaAlumnos.add(new Alumno(uriUrlImagen, nombre, curso,idFireBase));
                     }
                 }
-
             }
         });
     }
@@ -133,7 +124,6 @@ public class principal extends AppCompatActivity {
         builder.setPositiveButton("Sí", (dialog, which) -> {
             mAuth.signOut();
             Intent i = new Intent(principal.this, inicioSesion.class);
-
             startActivity(i);
             finish();
         });

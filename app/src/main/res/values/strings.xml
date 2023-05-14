@@ -23,5 +23,9 @@
     <string name="logo_de_aplicacion">Logo de aplicacion</string>
     <string name="anadir">Añadir</string>
     <string name="eliminar">Eliminar</string>
+    <string name="imagen_alumno">imagen de alumno</string>
+    <string name="volver">Volver</string>
+    <string name="datos_del_alumno">Datos del alumno</string>
+    <string name="perfil_alumno">Perfil alumno</string>
 
 </resources>
