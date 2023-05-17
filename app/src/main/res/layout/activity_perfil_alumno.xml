@@ -11,32 +11,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
-        android:padding="40dp">
+        android:padding="40dp"
+        tools:layout_editor_absoluteX="151dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <TextView
-            android:id="@+id/titulo"
-            android:layout_centerHorizontal="true"
+            android:id="@+id/textoVolver"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/perfil_alumno"
-            android:textAllCaps="true"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/titulo"
-            android:textSize="40sp" />
-
+            android:layout_marginBottom="10sp"
+            android:clickable="true"
+            android:onClick="volverAtras"
+            android:text="@string/volver"
+            android:textColor="#858585"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"/>
         <ImageView
             android:id="@+id/imagenAlumnos"
-            android:layout_marginTop="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="275dp"
+            android:layout_width="230sp"
+            android:layout_height="200dp"
+            android:layout_below="@id/textoVolver"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/titulo"
+            android:layout_marginTop="20sp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/marco_imagen_alumno"
             android:contentDescription="@string/imagen_alumno"
             android:padding="5sp"
             android:src="@drawable/alumno" />
-    <!--
         <TextView
 
             android:id="@+id/datoNombre"
@@ -46,6 +48,7 @@
             android:layout_marginStart="20sp"
             android:text="Nombre: Noelia Valladar Aroca"
             android:layout_marginTop="20sp"
+            android:layout_centerHorizontal="true"
             android:textAllCaps="false"
             android:textColor="@color/titulo"
             android:textSize="20sp" />
@@ -56,66 +59,42 @@
             android:layout_below="@id/datoNombre"
             android:layout_marginStart="20sp"
             android:text="Curso: 2º Bachillerato"
+            android:layout_centerHorizontal="true"
             android:textAllCaps="false"
             android:layout_marginTop="10dp"
             android:textColor="@color/titulo"
             android:textSize="20sp" />
-        <TextView
-            android:id="@+id/datoAsignaturas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/datoCurso"
-            android:layout_marginStart="20sp"
-            android:text="Asignaturas: Mates, lengua, Biologia"
-            android:textAllCaps="false"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/titulo"
-            android:textSize="20sp" />
-            -->
         <Button
             android:id="@+id/botonDatosAlumno"
             android:layout_width="375sp"
             android:layout_height="wrap_content"
-            android:text="@string/datos_del_alumno"
-            android:textSize="16sp"
-            android:textColor="@color/blanco"
-            android:background="@drawable/botones"
-            android:layout_below="@id/imagenAlumnos"
+            android:layout_below="@id/datoCurso"
             android:layout_marginTop="30sp"
-            />
+            android:background="@drawable/botones"
+            android:onClick="datosAlumno"
+            android:text="@string/asignaturas"
+            android:textColor="@color/blanco"
+            android:textSize="16sp" />
+
         <Button
             android:id="@+id/botonCalificaciones"
             android:layout_width="375sp"
             android:layout_height="wrap_content"
-            android:text="@string/calificaciones"
-            android:textSize="16sp"
-            android:textColor="@color/blanco"
-            android:background="@drawable/botones"
             android:layout_below="@id/botonDatosAlumno"
             android:layout_marginTop="20sp"
-            />
+            android:background="@drawable/botones"
+            android:text="@string/calificaciones"
+            android:textColor="@color/blanco"
+            android:textSize="16sp" />
+
         <Button
             android:id="@+id/botonAusencias"
             android:layout_width="375sp"
             android:layout_height="wrap_content"
-            android:text="@string/ausencia"
-            android:textSize="16sp"
-            android:textColor="@color/blanco"
-            android:background="@drawable/botones"
             android:layout_below="@id/botonCalificaciones"
             android:layout_marginTop="20sp"
-            />
-        <Button
-            android:id="@+id/botonVolver"
-            android:layout_width="150sp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/cerrarsession"
-            android:onClick="cerrarSesion"
-            android:paddingHorizontal="20dp"
-            android:text="@string/volver"
-            android:textAllCaps="false"
+            android:background="@drawable/botones"
+            android:text="@string/ausencia"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
     </RelativeLayout>

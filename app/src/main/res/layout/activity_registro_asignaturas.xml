@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/azulFondo"
-    tools:context=".consultarAlumnos">
-
+    tools:context=".RegistroAsignaturas">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="40dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
+
         <TextView
             android:id="@+id/textoVolver"
             android:layout_width="wrap_content"
@@ -30,24 +30,46 @@
             android:textColor="@color/titulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textoVolver"
             android:layout_centerHorizontal="true"
+            android:layout_below="@id/textoVolver"
             android:textStyle="bold"
-            android:layout_marginBottom="35sp"
-            android:text="@string/consulta_de_alumnos"
+            android:text="@string/creaci_n_asignatura"
             android:textSize="30sp" />
 
+        <EditText
+            android:id="@+id/campoAsignatura"
+            android:hint="@string/asignatura"
+            android:background="@drawable/contenedor_campos"
+
+            android:layout_width="250sp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titulo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="35sp"/>
+
+        <Button
+            android:id="@+id/botonCrear"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/campoAsignatura"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20sp"
+            android:layout_marginBottom="35dp"
+            android:background="@drawable/botones"
+            android:onClick="crearAsignatura"
+
+            android:text="@string/crear"
+            android:textColor="@color/blanco" />
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-android:layout_below="@id/titulo"
+            android:layout_below="@+id/botonCrear"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20sp"
             android:fillViewport="true"
             android:background="@drawable/listaformato">
 
             <ListView
-                android:id="@+id/listaAlumnos"
+                android:id="@+id/listaAsignaturas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -55,5 +77,4 @@ android:layout_below="@id/titulo"
 
 
     </RelativeLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

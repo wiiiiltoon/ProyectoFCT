@@ -14,12 +14,35 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp"
         >
+        <TextView
+            android:id="@+id/textoVolver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10sp"
+            android:clickable="true"
+            android:onClick="volverAtras"
+            android:text="@string/volver"
+            android:textColor="#858585"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"/>
+        <TextView
+            android:id="@+id/titulo"
+            android:textColor="@color/titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textoVolver"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:text="Registro alumnos"
+            android:textSize="30sp" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/anadirAlumno"
-            android:layout_alignParentTop="true"
+            android:layout_marginTop="35sp"
+            android:layout_below="@id/titulo"
             android:layout_marginBottom="35dp"
             android:fillViewport="true"
             android:background="@drawable/listaformato">

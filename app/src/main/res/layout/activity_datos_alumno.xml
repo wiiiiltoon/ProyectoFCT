@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".datosAlumno">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:padding="15sp">
+
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/datos_del_alumno"
+            android:textAllCaps="false"
+            android:textColor="@color/titulo"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/datoNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titulo"
+            android:layout_marginTop="25sp"
+            android:layout_centerHorizontal="true"
+            android:text="Nombre: Noelia Valladar Aroca"
+            android:textAllCaps="false"
+            android:textColor="@color/titulo"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/datoCurso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/datoNombre"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Curso: 2º Bachillerato"
+            android:textAllCaps="false"
+            android:textColor="@color/titulo"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/datoAsignaturas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/datoCurso"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="Asignaturas:"
+            android:textAllCaps="false"
+            android:textColor="@color/titulo"
+            android:textSize="20sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listaAlumnos"
+            android:layout_width="match_parent"
+            android:layout_height="60sp"
+            android:layout_below="@id/datoAsignaturas"
+            android:layout_marginTop="20sp" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

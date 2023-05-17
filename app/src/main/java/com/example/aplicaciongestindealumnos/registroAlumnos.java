@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,6 +53,7 @@ public class registroAlumnos extends AppCompatActivity {
     Adaptador adaptador;
     ImageView imagenSeleccionada;
     String emailDB;
+    TextView volver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,11 @@ public class registroAlumnos extends AppCompatActivity {
 
         listaAlumnos = new ArrayList<>();
         listViewAlumnos = findViewById(R.id.listaAlumnos);
+
+        volver = findViewById(R.id.textoVolver);
+        SpannableString spannableString = new SpannableString("Volver");
+        spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        volver.setText(spannableString);
 
         Intent i = getIntent();
         emailDB = i.getStringExtra("correoUsuario");
@@ -116,7 +126,7 @@ public class registroAlumnos extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Toast.makeText(getApplicationContext(), "Agregado correctamente", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Eliminado correctamente", Toast.LENGTH_SHORT).show();
 
                                         // Obtiene el elemento seleccionado y lo elimina del array y del adaptador
                                         adaptador.remove(alumnoSeleccionado);
@@ -145,7 +155,9 @@ public class registroAlumnos extends AppCompatActivity {
         });
         alumnosRefDB = db.collection("users").document(emailDB).collection("alumnos");
     }
-
+    public void volver(View view){
+        finish();
+    }
     public void anadirAlumno(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(registroAlumnos.this);
         builder.setTitle("Añadir alumno");
@@ -257,7 +269,6 @@ public class registroAlumnos extends AppCompatActivity {
                                                 public void onSuccess(Void aVoid) {
                                                     // Añadimos un alumno a la lista local
                                                     listaAlumnos.add(new Alumno(uriElegidaCliente, nombre, curso, nuevoID));
-
                                                     // Crear una instancia del adaptador con la lista de alumnos y establecerlo en la lista
                                                     adaptador = new Adaptador(registroAlumnos.this, listaAlumnos);
                                                     listViewAlumnos.setAdapter(adaptador);
@@ -292,7 +303,10 @@ public class registroAlumnos extends AppCompatActivity {
         });
         builder.show();
     }
-
+    public void volverAtras(View view) {
+        // Acción de volver atrás
+        onBackPressed();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

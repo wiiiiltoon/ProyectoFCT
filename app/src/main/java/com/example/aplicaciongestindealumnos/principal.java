@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,7 +19,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -30,9 +33,10 @@ public class principal extends AppCompatActivity {
     DocumentReference referenciaCorreo;
     String emailDB;
     TextView datoNombre, datoCentro;
-    Button consulta, registro, calendario, informe, cerrarSesion;
+    Button consulta, registro, calendario, informe, cerrarSesion,asignaturas;
     ArrayList<Alumno> listaAlumnos;
-    CollectionReference alumnosRefDB;
+    ArrayList<String> listaAsignaturas;
+    CollectionReference alumnosRefDB, asignaturasRefDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +45,14 @@ public class principal extends AppCompatActivity {
 
         consulta = findViewById(R.id.botonConsulta);
         registro = findViewById(R.id.botonRegistro);
+        asignaturas = findViewById(R.id.botonAsignaturas);
         calendario = findViewById(R.id.botonCalendario);
         informe = findViewById(R.id.botonInforme);
         cerrarSesion = findViewById(R.id.cerrarSesion);
         datoNombre = findViewById(R.id.datoNombre);
         datoCentro = findViewById(R.id.datoCentro);
         listaAlumnos = new ArrayList<>();
+        listaAsignaturas = new ArrayList<>();
 
 
         //Instancia para recoger el correo
@@ -73,23 +79,43 @@ public class principal extends AppCompatActivity {
         } else {
             Log.w("principal", "El usuario actual es nulo");
         }
-        //hacemos referencia a la collecion
+        //hacemos referencia a las colleciones
         alumnosRefDB = db.collection("users").document(emailDB).collection("alumnos");
-        // Cargar em lista los alumnos ya registrados en la base de datos
-        alumnosRefDB.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        asignaturasRefDB = db.collection("users").document(emailDB).collection("asignaturas");
+        // Cargar en lista los alumnos ya registrados en la base de datos
+        alumnosRefDB.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Clase: principal.java", "Error al escuchar los cambios en la base de datos.", error);
+                    return;
+                }
+                cargarAlumnos();
+            }
+        });
+        asignaturasRefDB.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Clase: principal.java", "Error al escuchar los cambios en la base de datos.", error);
+                    return;
+                }
+                cargarAsignaturas();
+            }
+        });
+    }
+
+    private void cargarAsignaturas() {
+        listaAsignaturas.clear();
+        asignaturasRefDB.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     // Recorrer los documentos y obtener los datos de cada alumno
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Obtener los datos del documento y convertirlos a un objeto Alumno
-                        String idFireBase = document.getId();
-                        String nombre = document.getString("nombre");
-                        String curso = document.getString("curso");
-                        String urlImagen = document.getString("url_imagen");
-                        Uri uriUrlImagen = Uri.parse(urlImagen);
-
-                        listaAlumnos.add(new Alumno(uriUrlImagen, nombre, curso,idFireBase));
+                        String idAsignatura = document.getId();
+                        listaAsignaturas.add(idAsignatura);
                     }
                 }
             }
@@ -111,6 +137,12 @@ public class principal extends AppCompatActivity {
         i.putExtra("correoUsuario",emailDB);
         startActivity(i);
     }
+    public void crearAsignaturas(View view) {
+        Intent i = new Intent(principal.this,RegistroAsignaturas.class);
+        i.putStringArrayListExtra("listaAsignaturas", listaAsignaturas);
+        i.putExtra("correoUsuario",emailDB);
+        startActivity(i);
+    }
 
     @Override
     public void onBackPressed() {
@@ -129,5 +161,25 @@ public class principal extends AppCompatActivity {
         });
         builder.setNegativeButton("No", null);
         builder.show();
+    }
+    private void cargarAlumnos() {
+        listaAlumnos.clear(); // limpiar la lista antes de cargar de nuevo
+        alumnosRefDB.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Recorrer los documentos y obtener los datos de cada alumno
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Obtener los datos del documento y convertirlos a un objeto Alumno
+                        String idFireBase = document.getId();
+                        String nombre = document.getString("nombre");
+                        String curso = document.getString("curso");
+                        String urlImagen = document.getString("url_imagen");
+                        Uri uriUrlImagen = Uri.parse(urlImagen);
+                        listaAlumnos.add(new Alumno(uriUrlImagen, nombre, curso,idFireBase));
+                    }
+                }
+            }
+        });
     }
 }

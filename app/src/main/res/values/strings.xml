@@ -24,8 +24,13 @@
     <string name="anadir">Añadir</string>
     <string name="eliminar">Eliminar</string>
     <string name="imagen_alumno">imagen de alumno</string>
-    <string name="volver">Volver</string>
     <string name="datos_del_alumno">Datos del alumno</string>
     <string name="perfil_alumno">Perfil alumno</string>
+    <string name="asignatura">Asignatura</string>
+    <string name="crear">Crear</string>
+    <string name="creaci_n_asignatura">Creación asignatura</string>
+    <string name="asignaturas">Asignaturas</string>
+    <string name="volver">&lt; Volver</string>
+    <string name="consulta_de_alumnos">Consulta de alumnos</string>
 
 </resources>

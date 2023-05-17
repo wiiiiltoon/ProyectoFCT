@@ -3,10 +3,14 @@ package com.example.aplicaciongestindealumnos;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +40,7 @@ public class consultarAlumnos extends AppCompatActivity {
     Adaptador adaptador;
     ImageView imagenSeleccionada;
     String emailDB;
+    TextView volver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,11 @@ public class consultarAlumnos extends AppCompatActivity {
 
         listaAlumnos = new ArrayList<>();
         listViewAlumnos = findViewById(R.id.listaAlumnos);
+
+        volver = findViewById(R.id.textoVolver);
+        SpannableString spannableString = new SpannableString("Volver");
+        spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        volver.setText(spannableString);
 
         Intent i = getIntent();
         emailDB = i.getStringExtra("correoUsuario");
@@ -107,9 +117,10 @@ public class consultarAlumnos extends AppCompatActivity {
         });
         alumnosRefDB = db.collection("users").document(emailDB).collection("alumnos");
     }
-
-
-
+    public void volverAtras(View view) {
+        // Acción de volver atrás
+        onBackPressed();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
