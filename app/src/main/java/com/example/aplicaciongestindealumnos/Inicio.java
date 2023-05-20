@@ -27,7 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class principal extends AppCompatActivity {
+public class Inicio extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     DocumentReference referenciaCorreo;
@@ -36,7 +36,8 @@ public class principal extends AppCompatActivity {
     Button consulta, registro, calendario, informe, cerrarSesion,asignaturas;
     ArrayList<Alumno> listaAlumnos;
     ArrayList<String> listaAsignaturas;
-    CollectionReference alumnosRefDB, asignaturasRefDB;
+    ArrayList<NotaCalendario> listaNotasCalendario;
+    CollectionReference alumnosRefDB, asignaturasRefDB,notasCalendarioRefDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class principal extends AppCompatActivity {
         datoCentro = findViewById(R.id.datoCentro);
         listaAlumnos = new ArrayList<>();
         listaAsignaturas = new ArrayList<>();
+        listaNotasCalendario = new ArrayList<>();
 
 
         //Instancia para recoger el correo
@@ -77,17 +79,18 @@ public class principal extends AppCompatActivity {
                 }
             });
         } else {
-            Log.w("principal", "El usuario actual es nulo");
+            Log.w("Inicio", "El usuario actual es nulo");
         }
         //hacemos referencia a las colleciones
         alumnosRefDB = db.collection("users").document(emailDB).collection("alumnos");
         asignaturasRefDB = db.collection("users").document(emailDB).collection("asignaturas");
+        notasCalendarioRefDB = db.collection("users").document(emailDB).collection("notasCalendario");
         // Cargar en lista los alumnos ya registrados en la base de datos
         alumnosRefDB.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
-                    Log.e("Clase: principal.java", "Error al escuchar los cambios en la base de datos.", error);
+                    Log.e("Clase: Inicio.java", "Error al escuchar los cambios en la base de datos.", error);
                     return;
                 }
                 cargarAlumnos();
@@ -97,10 +100,20 @@ public class principal extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
-                    Log.e("Clase: principal.java", "Error al escuchar los cambios en la base de datos.", error);
+                    Log.e("Clase: Inicio.java", "Error al escuchar los cambios en la base de datos.", error);
                     return;
                 }
                 cargarAsignaturas();
+            }
+        });
+        notasCalendarioRefDB.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Clase: Inicio.java", "Error al escuchar los cambios en la base de datos.", error);
+                    return;
+                }
+                cargarNotasCalendario();
             }
         });
     }
@@ -111,9 +124,7 @@ public class principal extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    // Recorrer los documentos y obtener los datos de cada alumno
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        // Obtener los datos del documento y convertirlos a un objeto Alumno
                         String idAsignatura = document.getId();
                         listaAsignaturas.add(idAsignatura);
                     }
@@ -125,21 +136,27 @@ public class principal extends AppCompatActivity {
     public void cerrarSesion(View view) {
         mostrarCerrarSesion();
     }
-    public void registroAlumnos(View view) {
-        Intent i = new Intent(principal.this,registroAlumnos.class);
+    public void RegistroAlumnos(View view) {
+        Intent i = new Intent(Inicio.this, RegistroAlumnos.class);
         i.putExtra("listaAlumnos", listaAlumnos);
         i.putExtra("correoUsuario",emailDB);
         startActivity(i);
     }
-    public void consultarAlumnos(View view) {
-        Intent i = new Intent(principal.this,consultarAlumnos.class);
+    public void ConsultarAlumnos(View view) {
+        Intent i = new Intent(Inicio.this, ConsultarAlumnos.class);
         i.putExtra("listaAlumnos", listaAlumnos);
         i.putExtra("correoUsuario",emailDB);
         startActivity(i);
     }
     public void crearAsignaturas(View view) {
-        Intent i = new Intent(principal.this,RegistroAsignaturas.class);
+        Intent i = new Intent(Inicio.this,RegistroAsignaturas.class);
         i.putStringArrayListExtra("listaAsignaturas", listaAsignaturas);
+        i.putExtra("correoUsuario",emailDB);
+        startActivity(i);
+    }
+    public void Calendario(View view) {
+        Intent i = new Intent(Inicio.this, Calendario.class);
+        i.putExtra("listaNotasCalendario", listaNotasCalendario);
         i.putExtra("correoUsuario",emailDB);
         startActivity(i);
     }
@@ -155,7 +172,7 @@ public class principal extends AppCompatActivity {
         builder.setMessage("¿Estás seguro de que quieres cerrar sesión?");
         builder.setPositiveButton("Sí", (dialog, which) -> {
             mAuth.signOut();
-            Intent i = new Intent(principal.this, inicioSesion.class);
+            Intent i = new Intent(Inicio.this, InicioSesion.class);
             startActivity(i);
             finish();
         });
@@ -163,7 +180,7 @@ public class principal extends AppCompatActivity {
         builder.show();
     }
     private void cargarAlumnos() {
-        listaAlumnos.clear(); // limpiar la lista antes de cargar de nuevo
+        listaAlumnos.clear();
         alumnosRefDB.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -177,6 +194,21 @@ public class principal extends AppCompatActivity {
                         String urlImagen = document.getString("url_imagen");
                         Uri uriUrlImagen = Uri.parse(urlImagen);
                         listaAlumnos.add(new Alumno(uriUrlImagen, nombre, curso,idFireBase));
+                    }
+                }
+            }
+        });
+    }
+    private void cargarNotasCalendario() {
+        listaNotasCalendario.clear();
+        notasCalendarioRefDB.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String fecha = document.getId();
+                        String nota = document.getString("nota");
+                        listaNotasCalendario.add(new NotaCalendario(fecha,nota));
                     }
                 }
             }

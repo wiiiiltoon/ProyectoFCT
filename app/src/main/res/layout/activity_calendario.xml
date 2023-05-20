@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/azulFondo"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="40dp"
+        tools:layout_editor_absoluteX="33dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/textoVolver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="20sp"
+            android:clickable="true"
+            android:onClick="volverAtras"
+            android:text="@string/volver"
+            android:textColor="#858585"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/mesYaño"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textoVolver"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/borde_campos_sin_margin"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:onClick="mesAnterior"
+                android:text="@string/anterior"
+                android:textColor="@color/negro"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/campoMesAño"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Mayo 2023"
+                android:textAlignment="center"
+                android:textColor="@color/negro"
+                android:textSize="20sp" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:onClick="mesPosterior"
+                android:text="@string/posterior"
+                android:textColor="@color/negro"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/calendario"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_above="@id/botonAñadirNota"
+            android:layout_below="@id/mesYaño"
+            android:layout_weight="1"
+            android:background="@drawable/contenedor_campos"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10sp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="L"
+                    android:textAlignment="center"
+                    android:textColor="@color/titulo"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="M"
+                    android:textAlignment="center"
+                    android:textColor="@color/titulo"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="X"
+                    android:textAlignment="center"
+                    android:textColor="@color/titulo"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="J"
+                    android:textAlignment="center"
+                    android:textColor="@color/titulo"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="V"
+                    android:textAlignment="center"
+                    android:textColor="@color/titulo"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="S"
+                    android:textAlignment="center"
+                    android:textColor="@color/titulo"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="D"
+                    android:textAlignment="center"
+                    android:textColor="@color/titulo"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/calendarRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="310sp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/botonAñadirNota"
+            android:layout_width="200sp"
+            android:layout_height="45sp"
+            android:layout_above="@id/notas"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20sp"
+            android:onClick="anadirNota"
+            android:background="@drawable/botones"
+            android:text="Añadir nota"
+            android:textColor="@color/blanco"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/notas"
+            android:layout_width="match_parent"
+            android:layout_height="100sp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20sp"
+            android:background="@drawable/contenedor_campos"
+            android:gravity="center"
+            android:text="No hay notas para este dia"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+    </RelativeLayout>
+</LinearLayout>

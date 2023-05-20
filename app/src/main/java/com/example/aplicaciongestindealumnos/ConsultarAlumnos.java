@@ -29,7 +29,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 
 
-public class consultarAlumnos extends AppCompatActivity {
+public class ConsultarAlumnos extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseStorage storage;
     CollectionReference alumnosRefDB;
@@ -37,7 +37,7 @@ public class consultarAlumnos extends AppCompatActivity {
     StorageReference storageRef;
     ArrayList<Alumno> listaAlumnos;
     ListView listViewAlumnos;
-    Adaptador adaptador;
+    AdaptadorAlumnos adaptadorAlumnos;
     ImageView imagenSeleccionada;
     String emailDB;
     TextView volver;
@@ -66,10 +66,10 @@ public class consultarAlumnos extends AppCompatActivity {
         storageRef = SingletonFirebase.getReferenciaFotos();
 
 
-        // Crear una instancia del adaptador con la lista de alumnos traida desde principal
+        // Crear una instancia del adaptadorAlumnos con la lista de alumnos traida desde Inicio
         listaAlumnos = i.getParcelableArrayListExtra("listaAlumnos");
-        adaptador = new Adaptador(consultarAlumnos.this, listaAlumnos);
-        listViewAlumnos.setAdapter(adaptador);
+        adaptadorAlumnos = new AdaptadorAlumnos(ConsultarAlumnos.this, listaAlumnos);
+        listViewAlumnos.setAdapter(adaptadorAlumnos);
         storageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
             @Override
             public void onSuccess(StorageMetadata storageMetadata) {
@@ -106,7 +106,7 @@ public class consultarAlumnos extends AppCompatActivity {
                 Uri foto = alumnoSeleccionado.getUrlFoto();
 
 
-                Intent i = new Intent(consultarAlumnos.this,perfilAlumno.class);
+                Intent i = new Intent(ConsultarAlumnos.this, PerfilAlumno.class);
                 i.putExtra("nombreAlumno", nombreAlumno);
                 i.putExtra("cursoAlumno",cursoAlumno);
                 i.putExtra("idAlumno",idAlumno);

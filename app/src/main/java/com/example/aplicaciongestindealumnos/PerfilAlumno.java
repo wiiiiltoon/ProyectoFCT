@@ -24,7 +24,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-public class perfilAlumno extends AppCompatActivity {
+public class PerfilAlumno extends AppCompatActivity {
     FirebaseStorage storage;
     StorageReference storageRef;
     String  nombre, curso,idFirebase, asignaturas;
@@ -88,7 +88,7 @@ public class perfilAlumno extends AppCompatActivity {
         asignaturasAlumno.add("Ingles");
         asignaturasAlumno.add("Historia");
 
-        adaptadorAsignaturas adaptador = new adaptadorAsignaturas(asignaturasAlumno);
+        AdaptadorAsignaturas adaptador = new AdaptadorAsignaturas(asignaturasAlumno);
         recycler.setAdapter(adaptador);
 
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {

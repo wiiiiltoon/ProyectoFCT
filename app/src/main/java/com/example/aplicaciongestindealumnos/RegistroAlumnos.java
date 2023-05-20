@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class registroAlumnos extends AppCompatActivity {
+public class RegistroAlumnos extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseStorage storage;
     CollectionReference alumnosRefDB;
@@ -50,7 +50,7 @@ public class registroAlumnos extends AppCompatActivity {
     StorageReference storageRef;
     ArrayList<Alumno> listaAlumnos;
     ListView listViewAlumnos;
-    Adaptador adaptador;
+    AdaptadorAlumnos adaptadorAlumnos;
     ImageView imagenSeleccionada;
     String emailDB;
     TextView volver;
@@ -79,10 +79,10 @@ public class registroAlumnos extends AppCompatActivity {
         storageRef = SingletonFirebase.getReferenciaFotos();
 
 
-        // Crear una instancia del adaptador con la lista de alumnos traida desde principal
+        // Crear una instancia del adaptadorAlumnos con la lista de alumnos traida desde Inicio
         listaAlumnos = i.getParcelableArrayListExtra("listaAlumnos");
-        adaptador = new Adaptador(registroAlumnos.this, listaAlumnos);
-        listViewAlumnos.setAdapter(adaptador);
+        adaptadorAlumnos = new AdaptadorAlumnos(RegistroAlumnos.this, listaAlumnos);
+        listViewAlumnos.setAdapter(adaptadorAlumnos);
         storageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
             @Override
             public void onSuccess(StorageMetadata storageMetadata) {
@@ -112,14 +112,14 @@ public class registroAlumnos extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Muestra un cuadro de diálogo preguntando si se desea eliminar el alumno
-                AlertDialog.Builder builder = new AlertDialog.Builder(registroAlumnos.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegistroAlumnos.this);
                 builder.setTitle("Eliminar alumno");
                 builder.setMessage("¿Está seguro que desea eliminar este alumno?");
 
                 builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Alumno alumnoSeleccionado = (Alumno) adaptador.getItem(position);
+                        Alumno alumnoSeleccionado = (Alumno) adaptadorAlumnos.getItem(position);
                         String idAlumno = alumnoSeleccionado.getIdFireBase();
                         DocumentReference alumnoRef = db.collection("users").document(emailDB).collection("alumnos").document(idAlumno);
                         alumnoRef.delete()
@@ -128,9 +128,9 @@ public class registroAlumnos extends AppCompatActivity {
                                     public void onSuccess(Void aVoid) {
                                         Toast.makeText(getApplicationContext(), "Eliminado correctamente", Toast.LENGTH_SHORT).show();
 
-                                        // Obtiene el elemento seleccionado y lo elimina del array y del adaptador
-                                        adaptador.remove(alumnoSeleccionado);
-                                        adaptador.notifyDataSetChanged();
+                                        // Obtiene el elemento seleccionado y lo elimina del array y del adaptadorAlumnos
+                                        adaptadorAlumnos.remove(alumnoSeleccionado);
+                                        adaptadorAlumnos.notifyDataSetChanged();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -159,42 +159,42 @@ public class registroAlumnos extends AppCompatActivity {
         finish();
     }
     public void anadirAlumno(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(registroAlumnos.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(RegistroAlumnos.this);
         builder.setTitle("Añadir alumno");
         builder.setMessage("Indique los datos del alumno:");
 
         // Boton para añadir imagen
-        Button botonImagen = new Button(registroAlumnos.this);
+        Button botonImagen = new Button(RegistroAlumnos.this);
         botonImagen.setText("Seleccionar imagen");
 
         // Campo de nombre y apellidos
-        EditText campoNombre = new EditText(registroAlumnos.this);
+        EditText campoNombre = new EditText(RegistroAlumnos.this);
         campoNombre.setHint("Nombre y apellidos");
 
         // Campo para añdir el año del curso
-        EditText campoAñoCurso = new EditText(registroAlumnos.this);
+        EditText campoAñoCurso = new EditText(RegistroAlumnos.this);
         campoAñoCurso.setHint("Año del curso");
 
         // Campo desplegable de Nivel Educativo
         String[] nivelesEducativos = {"ESO", "BACHILLER", "GRADO MEDIO", "GRADO SUPERIOR", "FP MEDIO", "FP SUPERIOR"};
-        Spinner spinnerNivelEducativo = new Spinner(registroAlumnos.this);
-        ArrayAdapter<String> adapterNivelEducativo = new ArrayAdapter<>(registroAlumnos.this, android.R.layout.simple_spinner_dropdown_item, nivelesEducativos);
+        Spinner spinnerNivelEducativo = new Spinner(RegistroAlumnos.this);
+        ArrayAdapter<String> adapterNivelEducativo = new ArrayAdapter<>(RegistroAlumnos.this, android.R.layout.simple_spinner_dropdown_item, nivelesEducativos);
 
-        // Establece el adaptador para el spinner
+        // Establece el adaptadorAlumnos para el spinner
         spinnerNivelEducativo.setAdapter(adapterNivelEducativo);
 
-        EditText campoAsignatura = new EditText(registroAlumnos.this);
+        EditText campoAsignatura = new EditText(RegistroAlumnos.this);
         campoAsignatura.setHint("Asignatura");
 
         // Creamos un layout para los campos de texto
-        LinearLayout layoutCampos = new LinearLayout(registroAlumnos.this);
+        LinearLayout layoutCampos = new LinearLayout(RegistroAlumnos.this);
         layoutCampos.setOrientation(LinearLayout.VERTICAL);
         layoutCampos.setGravity(Gravity.CENTER);
         layoutCampos.setPadding(50, 50, 50, 50);
 
         // Agregamos los componentes al layout
         uriElegidaCliente = Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.logo);
-        imagenSeleccionada = new ImageView(registroAlumnos.this);
+        imagenSeleccionada = new ImageView(RegistroAlumnos.this);
         imagenSeleccionada.setImageResource(R.drawable.logo);
         imagenSeleccionada.setLayoutParams(new LinearLayout.LayoutParams(500, 500));
         imagenSeleccionada.setAdjustViewBounds(true);
@@ -269,9 +269,9 @@ public class registroAlumnos extends AppCompatActivity {
                                                 public void onSuccess(Void aVoid) {
                                                     // Añadimos un alumno a la lista local
                                                     listaAlumnos.add(new Alumno(uriElegidaCliente, nombre, curso, nuevoID));
-                                                    // Crear una instancia del adaptador con la lista de alumnos y establecerlo en la lista
-                                                    adaptador = new Adaptador(registroAlumnos.this, listaAlumnos);
-                                                    listViewAlumnos.setAdapter(adaptador);
+                                                    // Crear una instancia del adaptadorAlumnos con la lista de alumnos y establecerlo en la lista
+                                                    adaptadorAlumnos = new AdaptadorAlumnos(RegistroAlumnos.this, listaAlumnos);
+                                                    listViewAlumnos.setAdapter(adaptadorAlumnos);
                                                     Toast.makeText(getApplicationContext(), "Alumno agregado con exito", Toast.LENGTH_SHORT).show();
                                                 }
                                             })

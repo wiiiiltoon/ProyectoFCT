@@ -10,24 +10,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class adaptadorAsignaturas extends RecyclerView.Adapter<adaptadorAsignaturas.ViewHolderDatos>{
+public class AdaptadorAsignaturas extends RecyclerView.Adapter<AdaptadorAsignaturas.ViewHolderDatos>{
 
     ArrayList<String> listaAsignaturas;
 
-    public adaptadorAsignaturas(ArrayList<String> listaAsignaturas) {
+    public AdaptadorAsignaturas(ArrayList<String> listaAsignaturas) {
         this.listaAsignaturas = listaAsignaturas;
     }
 
     @NonNull
     @Override
-    public adaptadorAsignaturas.ViewHolderDatos onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdaptadorAsignaturas.ViewHolderDatos onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_asignatura,null,false);
         return new ViewHolderDatos(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull adaptadorAsignaturas.ViewHolderDatos holder, int position) {
+    public void onBindViewHolder(@NonNull AdaptadorAsignaturas.ViewHolderDatos holder, int position) {
         holder.asignarDatos(listaAsignaturas.get(position));
     }
 

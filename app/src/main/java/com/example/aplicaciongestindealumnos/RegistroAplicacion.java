@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Registro extends AppCompatActivity {
+public class RegistroAplicacion extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -57,7 +57,7 @@ public class Registro extends AppCompatActivity {
         ClickableSpan clickEnElLink = new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Registro.this, inicioSesion.class);
+                Intent i = new Intent(RegistroAplicacion.this, InicioSesion.class);
                 startActivity(i);
             }
         };
@@ -91,7 +91,7 @@ public class Registro extends AppCompatActivity {
         if (contrasena.equals(confirmarContrasena)) {
             mAuth.createUserWithEmailAndPassword(correo, contrasena)
                     .addOnCompleteListener(this, task -> {
-                        Log.e("Registro", "Error al crear usuario", task.getException());
+                        Log.e("RegistroAplicacion", "Error al crear usuario", task.getException());
                         if (task.isSuccessful()) {
 
                             //guardar datos en un maps para la base de datos
@@ -108,10 +108,10 @@ public class Registro extends AppCompatActivity {
                                     .addOnFailureListener(e -> Log.d("Agregacion", "Error al agregar en la base de datos"));
 
                             Toast.makeText(getApplicationContext(), "Usuario creado", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(getApplicationContext(), inicioSesion.class);
+                            Intent i = new Intent(getApplicationContext(), InicioSesion.class);
                             startActivity(i);
                         } else {
-                            Log.e("Registro", "Error al crear usuario: ", task.getException());
+                            Log.e("RegistroAplicacion", "Error al crear usuario: ", task.getException());
                             Toast.makeText(getApplicationContext(), "Verifique su correo electronico.", Toast.LENGTH_SHORT).show();
                         }
                     });

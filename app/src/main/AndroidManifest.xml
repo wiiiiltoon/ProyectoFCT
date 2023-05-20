@@ -17,28 +17,31 @@
         android:theme="@style/Theme.AplicacionGestiónDeAlumnos"
         tools:targetApi="31">
         <activity
+            android:name=".Calendario"
+            android:exported="false" />
+        <activity
             android:name=".RegistroAsignaturas"
             android:exported="false" />
         <activity
-            android:name=".datosAlumno"
+            android:name=".DatosAlumno"
             android:exported="false" />
         <activity
-            android:name=".perfilAlumno"
+            android:name=".PerfilAlumno"
             android:exported="false" />
         <activity
-            android:name=".consultarAlumnos"
+            android:name=".ConsultarAlumnos"
             android:exported="false" />
         <activity
-            android:name=".registroAlumnos"
+            android:name=".RegistroAlumnos"
             android:exported="false" />
         <activity
-            android:name=".principal"
+            android:name=".Inicio"
             android:exported="false" />
         <activity
-            android:name=".Registro"
+            android:name=".RegistroAplicacion"
             android:exported="false" />
         <activity
-            android:name=".inicioSesion"
+            android:name=".InicioSesion"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

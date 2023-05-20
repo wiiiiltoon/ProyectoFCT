@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".principal"
+    tools:context=".Inicio"
     android:background="@color/azulFondo">
 
 
@@ -53,7 +53,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
             android:background="@drawable/botones"
-            android:onClick="consultarAlumnos"
+            android:onClick="ConsultarAlumnos"
             android:text="@string/consulta_alumnos"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
@@ -66,7 +66,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
-            android:onClick="registroAlumnos"
+            android:onClick="RegistroAlumnos"
             android:text="@string/registro_alumnos"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
@@ -91,6 +91,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
+            android:onClick="Calendario"
             android:text="@string/calendario"
             android:textColor="@color/blanco"
             android:textSize="16sp" />

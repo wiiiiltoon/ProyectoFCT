@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class inicioSesion extends AppCompatActivity {
+public class InicioSesion extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     EditText mCorreo, mContrasena;
@@ -31,7 +31,7 @@ public class inicioSesion extends AppCompatActivity {
         CheckBox mostrarContrasena = findViewById(R.id.checkMostrarContrasena);
 
         registrarse.setOnClickListener(view -> {
-            Intent i = new Intent(com.example.aplicaciongestindealumnos.inicioSesion.this, Registro.class);
+            Intent i = new Intent(InicioSesion.this, RegistroAplicacion.class);
             startActivity(i);
         });
 
@@ -56,7 +56,7 @@ public class inicioSesion extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(getApplicationContext(), "Sesion iniciada correctamente", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(com.example.aplicaciongestindealumnos.inicioSesion.this, principal.class);
+                        Intent i = new Intent(InicioSesion.this, Inicio.class);
                         startActivity(i);
                     } else {
                         Toast.makeText(getApplicationContext(), "Credenciales incorrectas", Toast.LENGTH_SHORT).show();

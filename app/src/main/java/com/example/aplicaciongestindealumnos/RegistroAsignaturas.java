@@ -93,7 +93,6 @@ public class RegistroAsignaturas extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), "No se pudo eliminar la asignatura", Toast.LENGTH_SHORT).show();
                                     }
                                 });
-
                     }
                 });
 
@@ -108,10 +107,12 @@ public class RegistroAsignaturas extends AppCompatActivity {
             }
         });
     }
+
     public void volverAtras(View view) {
         // Acción de volver atrás
         onBackPressed();
     }
+
     public void crearAsignatura(View view) {
         String nombreAsignatura = campoAsignatura.getText().toString().replaceAll("\\s+", " ").trim().trim();
         if (nombreAsignatura.equals("")) {

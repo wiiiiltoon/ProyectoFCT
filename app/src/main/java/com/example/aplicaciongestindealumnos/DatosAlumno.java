@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class datosAlumno extends AppCompatActivity {
+public class DatosAlumno extends AppCompatActivity {
 
     ArrayList<String> asignaturasAlumno;
     RecyclerView recycler;
@@ -43,7 +43,7 @@ public class datosAlumno extends AppCompatActivity {
         asignaturasAlumno.add("Ingles");
         asignaturasAlumno.add("Historia");
 
-        adaptadorAsignaturas adaptador = new adaptadorAsignaturas(asignaturasAlumno);
+        AdaptadorAsignaturas adaptador = new AdaptadorAsignaturas(asignaturasAlumno);
         recycler.setAdapter(adaptador);
     }
 }

@@ -32,5 +32,7 @@
     <string name="asignaturas">Asignaturas</string>
     <string name="volver">&lt; Volver</string>
     <string name="consulta_de_alumnos">Consulta de alumnos</string>
+    <string name="anterior"><![CDATA[<-]]></string>
+    <string name="posterior"><![CDATA[->]]></string>
 
 </resources>

@@ -1,7 +1,6 @@
 package com.example.aplicaciongestindealumnos;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +12,12 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class Adaptador extends BaseAdapter {
+public class AdaptadorAlumnos extends BaseAdapter {
 
     private Context context;
     private ArrayList<Alumno> listaAlumnos;
 
-    public Adaptador(Context context, ArrayList<Alumno> lista) {
+    public AdaptadorAlumnos(Context context, ArrayList<Alumno> lista) {
         this.context = context;
         this.listaAlumnos = lista;
     }
