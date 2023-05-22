@@ -1,6 +1,5 @@
 package com.example.aplicaciongestindealumnos;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.text.Spanned;
 import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,10 +30,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.yalantis.ucrop.UCrop;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +51,7 @@ public class RegistroAlumnos extends AppCompatActivity {
     ListView listViewAlumnos;
     AdaptadorAlumnos adaptadorAlumnos;
     ImageView imagenSeleccionada;
+    ImageView imagenRecortada;
     String emailDB;
     TextView volver;
 
@@ -60,266 +60,234 @@ public class RegistroAlumnos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro_alumnos);
 
-        listaAlumnos = new ArrayList<>();
-        listViewAlumnos = findViewById(R.id.listaAlumnos);
+        relacionXML();
+        accionVolver();
+        recibirIntent();
+        construirListaAlumnos();
+        inicializarFireBase();
+        accionPulsarAlumno();
+    }
 
+    private void relacionXML() {
+
+        listViewAlumnos = findViewById(R.id.listaAlumnos);
         volver = findViewById(R.id.textoVolver);
+    }
+
+    private void accionVolver() {
         SpannableString spannableString = new SpannableString("Volver");
         spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         volver.setText(spannableString);
+    }
 
+    private void recibirIntent() {
         Intent i = getIntent();
         emailDB = i.getStringExtra("correoUsuario");
-
-
-        //llamos al singleton para instanciar
-        db = SingletonFirebase.getFireBase();
-
-        storage = SingletonFirebase.getStorage();
-        storageRef = SingletonFirebase.getReferenciaFotos();
-
-
-        // Crear una instancia del adaptadorAlumnos con la lista de alumnos traida desde Inicio
+        listaAlumnos = new ArrayList<>();
         listaAlumnos = i.getParcelableArrayListExtra("listaAlumnos");
+
+    }
+
+    private void construirListaAlumnos() {
         adaptadorAlumnos = new AdaptadorAlumnos(RegistroAlumnos.this, listaAlumnos);
         listViewAlumnos.setAdapter(adaptadorAlumnos);
-        storageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
-            @Override
-            public void onSuccess(StorageMetadata storageMetadata) {
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // La referencia no existe, intenta crearla
-                if (exception instanceof StorageException && ((StorageException) exception).getErrorCode() == StorageException.ERROR_OBJECT_NOT_FOUND) {
-                    storageRef.putBytes(new byte[]{0}).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // La referencia se creó exitosamente
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // No se pudo crear la referencia
-                        }
-                    });
-                }
-            }
-        });
-
-        // En caso de hacer clic en un elemento de la lista
-        listViewAlumnos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Muestra un cuadro de diálogo preguntando si se desea eliminar el alumno
-                AlertDialog.Builder builder = new AlertDialog.Builder(RegistroAlumnos.this);
-                builder.setTitle("Eliminar alumno");
-                builder.setMessage("¿Está seguro que desea eliminar este alumno?");
-
-                builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Alumno alumnoSeleccionado = (Alumno) adaptadorAlumnos.getItem(position);
-                        String idAlumno = alumnoSeleccionado.getIdFireBase();
-                        DocumentReference alumnoRef = db.collection("users").document(emailDB).collection("alumnos").document(idAlumno);
-                        alumnoRef.delete()
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Toast.makeText(getApplicationContext(), "Eliminado correctamente", Toast.LENGTH_SHORT).show();
-
-                                        // Obtiene el elemento seleccionado y lo elimina del array y del adaptadorAlumnos
-                                        adaptadorAlumnos.remove(alumnoSeleccionado);
-                                        adaptadorAlumnos.notifyDataSetChanged();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getApplicationContext(), "No se pudo eliminar el alumno", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
-                    }
-                });
-
-                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();
-            }
-        });
-        alumnosRefDB = db.collection("users").document(emailDB).collection("alumnos");
     }
-    public void volver(View view){
+
+    private void inicializarFireBase() {
+        db = SingletonFirebase.getFireBase();
+        storage = SingletonFirebase.getStorage();
+        alumnosRefDB = db.collection("users").document(emailDB).collection("alumnos");
+        storageRef = SingletonFirebase.getReferenciaFotos();
+        storageRef.getMetadata().addOnSuccessListener(storageMetadata -> {
+        }).addOnFailureListener(exception -> {
+            if (exception instanceof StorageException && ((StorageException) exception).getErrorCode() == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                storageRef.putBytes(new byte[]{0}).addOnSuccessListener(taskSnapshot -> {
+                }).addOnFailureListener(exception1 -> {
+                });
+            }
+        });
+    }
+
+    private void accionPulsarAlumno() {
+        listViewAlumnos.setOnItemClickListener((parent, view, position, id) -> mostrarEliminarAlumno(position));
+    }
+
+    private void mostrarEliminarAlumno(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(RegistroAlumnos.this);
+        builder.setTitle("Eliminar alumno");
+        builder.setMessage("¿Estás seguro de que quieres eliminar este alumno?");
+
+        builder.setPositiveButton("Eliminar", (dialog, which) -> eliminarAlumno(position));
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    private void eliminarAlumno(int position) {
+        Alumno alumnoSeleccionado = (Alumno) adaptadorAlumnos.getItem(position);
+        String idAlumno = alumnoSeleccionado.getIdFireBase();
+        DocumentReference alumnoRef = db.collection("users").document(emailDB).collection("alumnos").document(idAlumno);
+        alumnoRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getApplicationContext(), "Eliminado correctamente", Toast.LENGTH_SHORT).show();
+                        adaptadorAlumnos.remove(alumnoSeleccionado);
+                        adaptadorAlumnos.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "No se pudo eliminar el alumno", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void volver(View view) {
         finish();
     }
+
     public void anadirAlumno(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(RegistroAlumnos.this);
         builder.setTitle("Añadir alumno");
         builder.setMessage("Indique los datos del alumno:");
 
-        // Boton para añadir imagen
+        Button botonImagen = crearBotonImagen();
+        EditText campoNombre = crearCampoNombre();
+        EditText campoAñoCurso = crearCampoAñoCurso();
+        Spinner spinnerNivelEducativo = crearDesplegableNivelEducativo();
+        EditText campoAsignatura = crearCampoAsignatura();
+        uriElegidaCliente = Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.logo);
+        imagenRecortada = new ImageView(RegistroAlumnos.this);
+        imagenRecortada.setImageResource(R.drawable.logo);
+        imagenRecortada.setLayoutParams(new LinearLayout.LayoutParams(500, 500));
+        imagenRecortada.setAdjustViewBounds(true);
+
+        LinearLayout layoutCampos = crearLayoutCampos(imagenRecortada, botonImagen, campoNombre, campoAñoCurso, spinnerNivelEducativo, campoAsignatura);
+        builder.setView(layoutCampos);
+
+        botonImagen.setOnClickListener(v -> seleccionarImagen());
+
+        builder.setPositiveButton("Añadir", (dialog, which) -> {
+            String nombre = obtenerTexto(campoNombre);
+            String anio = obtenerTexto(campoAñoCurso);
+            String asignatura = obtenerTexto(campoAsignatura);
+            String nivelEducativo = spinnerNivelEducativo.getSelectedItem().toString();
+            String curso = anio + "º " + nivelEducativo;
+
+            if (nombre.equals("") && anio.equals("") && asignatura.equals("")) {
+                mostrarMensaje("Complete los campos requeridos");
+            } else {
+                String nuevoID = alumnosRefDB.document().getId();
+                String nombreImagen = generarNombreImagen();
+                StorageReference imageRef = storageRef.child(nombreImagen);
+
+                subirImagenFirebase(imageRef, nuevoID, nombre, curso);
+            }
+        });
+
+        builder.show();
+    }
+
+    private Button crearBotonImagen() {
         Button botonImagen = new Button(RegistroAlumnos.this);
         botonImagen.setText("Seleccionar imagen");
+        return botonImagen;
+    }
 
-        // Campo de nombre y apellidos
+    private EditText crearCampoNombre() {
         EditText campoNombre = new EditText(RegistroAlumnos.this);
         campoNombre.setHint("Nombre y apellidos");
+        return campoNombre;
+    }
 
-        // Campo para añdir el año del curso
+    private EditText crearCampoAñoCurso() {
         EditText campoAñoCurso = new EditText(RegistroAlumnos.this);
         campoAñoCurso.setHint("Año del curso");
+        return campoAñoCurso;
+    }
 
-        // Campo desplegable de Nivel Educativo
+    private Spinner crearDesplegableNivelEducativo() {
         String[] nivelesEducativos = {"ESO", "BACHILLER", "GRADO MEDIO", "GRADO SUPERIOR", "FP MEDIO", "FP SUPERIOR"};
         Spinner spinnerNivelEducativo = new Spinner(RegistroAlumnos.this);
         ArrayAdapter<String> adapterNivelEducativo = new ArrayAdapter<>(RegistroAlumnos.this, android.R.layout.simple_spinner_dropdown_item, nivelesEducativos);
-
-        // Establece el adaptadorAlumnos para el spinner
         spinnerNivelEducativo.setAdapter(adapterNivelEducativo);
+        return spinnerNivelEducativo;
+    }
 
+    private EditText crearCampoAsignatura() {
         EditText campoAsignatura = new EditText(RegistroAlumnos.this);
         campoAsignatura.setHint("Asignatura");
+        return campoAsignatura;
+    }
 
-        // Creamos un layout para los campos de texto
+    private LinearLayout crearLayoutCampos(ImageView imagen, Button botonImagen, EditText campoNombre, EditText campoAñoCurso, Spinner spinnerNivelEducativo, EditText campoAsignatura) {
         LinearLayout layoutCampos = new LinearLayout(RegistroAlumnos.this);
         layoutCampos.setOrientation(LinearLayout.VERTICAL);
         layoutCampos.setGravity(Gravity.CENTER);
         layoutCampos.setPadding(50, 50, 50, 50);
 
-        // Agregamos los componentes al layout
-        uriElegidaCliente = Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.logo);
-        imagenSeleccionada = new ImageView(RegistroAlumnos.this);
-        imagenSeleccionada.setImageResource(R.drawable.logo);
-        imagenSeleccionada.setLayoutParams(new LinearLayout.LayoutParams(500, 500));
-        imagenSeleccionada.setAdjustViewBounds(true);
-
-
-        layoutCampos.addView(imagenSeleccionada);
+        layoutCampos.addView(imagen);
         layoutCampos.addView(botonImagen);
         layoutCampos.addView(campoNombre);
         layoutCampos.addView(campoAñoCurso);
         layoutCampos.addView(spinnerNivelEducativo);
         layoutCampos.addView(campoAsignatura);
 
-        // Agregamos el layout al diálogo
-        builder.setView(layoutCampos);
-
-        botonImagen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, 1);
-
-            }
-        });
-
-        // agregamos botones al cuadro de dialogo y creamos una accion
-        builder.setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Recogemos los datos
-                String nombre = campoNombre.getText().toString().replaceAll("\\s+", " ").trim();
-                String anio = campoAñoCurso.getText().toString().replaceAll("\\s+", " ").trim();
-                String asignatura = campoAsignatura.getText().toString().replaceAll("\\s+", " ").trim();
-                String nivelEducativo = spinnerNivelEducativo.getSelectedItem().toString();
-                String curso = anio + "º " + nivelEducativo;
-
-                if (nombre.equals("") && anio.equals("") && asignatura.equals("")) {
-                    Toast.makeText(getApplicationContext(), "Complete los campos requeridos", Toast.LENGTH_SHORT).show();
-                } else {
-                    //Generamos una nueva ID para la base de datos
-                    String nuevoID = alumnosRefDB.document().getId();
-                    // Crear una referencia al archivo en Firebase Storage
-                    Date date = new Date();
-                    String timestamp = String.valueOf(date.getTime());
-                    String nombreImagen = "alumno_" + timestamp + ".jpg";
-                    StorageReference imageRef = storageRef.child(nombreImagen);
-
-                    // Subir la imagen a Firebase Storage
-                    UploadTask uploadTask = imageRef.putFile(uriElegidaCliente);
-
-                    // Manejar el resultado de la carga
-                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // La imagen se ha cargado con éxito
-                            imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri downloadUrl) {
-                                    // La URL de descarga de la imagen está disponible
-                                    String urlImagen = downloadUrl.toString();
-
-
-                                    //Creamos el map
-                                    Map<String, Object> nuevoAlumnoMap = new HashMap<>();
-                                    nuevoAlumnoMap.put("nombre", nombre);
-                                    nuevoAlumnoMap.put("curso", curso);
-                                    nuevoAlumnoMap.put("url_imagen", urlImagen);
-
-                                    // Añadir el nuevo alumno a la colección
-                                    alumnosRefDB.document(nuevoID).set(nuevoAlumnoMap)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    // Añadimos un alumno a la lista local
-                                                    listaAlumnos.add(new Alumno(uriElegidaCliente, nombre, curso, nuevoID));
-                                                    // Crear una instancia del adaptadorAlumnos con la lista de alumnos y establecerlo en la lista
-                                                    adaptadorAlumnos = new AdaptadorAlumnos(RegistroAlumnos.this, listaAlumnos);
-                                                    listViewAlumnos.setAdapter(adaptadorAlumnos);
-                                                    Toast.makeText(getApplicationContext(), "Alumno agregado con exito", Toast.LENGTH_SHORT).show();
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(getApplicationContext(), "Error al agregar alumno a Firestore", Toast.LENGTH_SHORT).show();
-
-                                                }
-                                            });
-                                }
-                            });
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Error al subir la imagen", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            }
-        });
-
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
+        return layoutCampos;
     }
+
+    private void seleccionarImagen() {
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, 1);
+
+    }
+
+    private String obtenerTexto(EditText campo) {
+        return campo.getText().toString().replaceAll("\\s+", " ").trim();
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_SHORT).show();
+    }
+
+    private String generarNombreImagen() {
+        Date date = new Date();
+        String timestamp = String.valueOf(date.getTime());
+        return "alumno_" + timestamp + ".jpg";
+    }
+
+    private void subirImagenFirebase(StorageReference imageRef, String nuevoID, String nombre, String curso) {
+        UploadTask uploadTask = imageRef.putFile(uriElegidaCliente);
+
+        uploadTask.addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> anadirAlumnoDB(downloadUrl, nombre, curso, nuevoID))).addOnFailureListener(e -> mostrarMensaje("Error al subir la imagen"));
+    }
+
+    private void anadirAlumnoDB(Uri downloadUrl, String nombre, String curso, String nuevoID) {
+        String urlImagen = downloadUrl.toString();
+        Map<String, Object> nuevoAlumnoMap = new HashMap<>();
+        nuevoAlumnoMap.put("nombre", nombre);
+        nuevoAlumnoMap.put("curso", curso);
+        nuevoAlumnoMap.put("url_imagen", urlImagen);
+
+        alumnosRefDB.document(nuevoID).set(nuevoAlumnoMap)
+                .addOnSuccessListener(aVoid -> anadirAlumnoListaLocal(downloadUrl, nombre, curso, nuevoID))
+                .addOnFailureListener(e -> mostrarMensaje("Error al agregar alumno a Firestore"));
+    }
+
+    private void anadirAlumnoListaLocal(Uri imagen, String nombre, String curso, String nuevoID) {
+        listaAlumnos.add(new Alumno(imagen, nombre, curso, nuevoID));
+        adaptadorAlumnos = new AdaptadorAlumnos(RegistroAlumnos.this, listaAlumnos);
+        listViewAlumnos.setAdapter(adaptadorAlumnos);
+        mostrarMensaje("Alumno agregado con éxito");
+    }
+
     public void volverAtras(View view) {
-        // Acción de volver atrás
         onBackPressed();
     }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            uriElegidaCliente = data.getData();
-            Toast.makeText(getApplicationContext(), uriElegidaCliente.toString(), Toast.LENGTH_SHORT).show();
-            imagenSeleccionada.setImageURI(uriElegidaCliente);
-        }
-    }
-
-    //Recorte de imagen cuando se selecciona una (proceso lento)
-    /* @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -340,14 +308,13 @@ public class RegistroAlumnos extends AppCompatActivity {
                     .withOptions(options)
                     .start(this);
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            imagenRecortada.setImageDrawable(null);
             uriElegidaCliente = UCrop.getOutput(data);
 
-            // Aquí puedes hacer algo con la imagen recortada, como subirla a Firebase Storage o mostrarla en una ImageView
-            imagenSeleccionada.setImageURI(uriElegidaCliente);
+            imagenRecortada.setImageURI(uriElegidaCliente);
+
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Throwable error = UCrop.getError(data);
-
-            // Aquí puedes manejar el error
         }
-    }*/
+    }
 }

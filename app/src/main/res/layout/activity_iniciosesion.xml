@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/logo"
-            android:hint="@string/correo_electronico"
+            android:hint="Correo electrónico"
             android:inputType="text"
             android:drawableStart="@drawable/user"
             android:drawablePadding="12dp"
@@ -80,11 +80,11 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textAllCaps="false"
+            android:onClick="registrarse"
             android:text="@string/registrarse"
-            />
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
 
     </RelativeLayout>

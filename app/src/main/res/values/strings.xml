@@ -8,9 +8,9 @@
     <string name="calendario">Calendario</string>
     <string name="generar_informe">Generar informe</string>
     <string name="creacion_de_usuario">Creación de usuario</string>
-    <string name="nombre_completo">Nombre y apellidos</string>
-    <string name="centro_docente">Centro docente</string>
-    <string name="correo_electronico">Correo electrónico</string>
+    <string name="nombre_completo">Nombre y apellidos *</string>
+    <string name="centro_docente">Centro docente *</string>
+    <string name="correo_electronico">Correo electrónico *</string>
     <string name="contrasena">Contraseña</string>
     <string name="confirmar_contrasena">Confirmar contraseña</string>
     <string name="mostrar_contrasena">Mostrar contraseña</string>

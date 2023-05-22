@@ -1,6 +1,5 @@
 package com.example.aplicaciongestindealumnos;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
@@ -10,57 +9,74 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 public class InicioSesion extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
-    EditText mCorreo, mContrasena;
-    Button inicioSesion, registrarse;
+    EditText campoCorreo, campoContrasena;
+    Button botonInicioSesion, botonRegistrarse;
     String correo, contrasena;
+    CheckBox mostrarContrasena;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iniciosesion);
+
         mAuth = FirebaseAuth.getInstance();
-        mCorreo = findViewById(R.id.campoCorreo);
-        mContrasena = findViewById(R.id.campoContrasena);
-        inicioSesion = findViewById(R.id.botonLogin);
-        registrarse = findViewById(R.id.botonRegistro);
-        CheckBox mostrarContrasena = findViewById(R.id.checkMostrarContrasena);
+        relacionXML();
+        accionMostrarContraseña();
+    }
 
-        registrarse.setOnClickListener(view -> {
-            Intent i = new Intent(InicioSesion.this, RegistroAplicacion.class);
-            startActivity(i);
-        });
+    public void registrarse(View view) {
+        Intent i = new Intent(InicioSesion.this, RegistroAplicacion.class);
+        startActivity(i);
+    }
 
+    private void relacionXML() {
+        campoCorreo = findViewById(R.id.campoCorreo);
+        campoContrasena = findViewById(R.id.campoContrasena);
+        botonInicioSesion = findViewById(R.id.botonLogin);
+        botonRegistrarse = findViewById(R.id.botonRegistro);
+        mostrarContrasena = findViewById(R.id.checkMostrarContrasena);
+    }
 
-        // Checkbox mostrar contraseña
+    private void accionMostrarContraseña() {
         mostrarContrasena.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 //Mostrar contraseña
-                mContrasena.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                campoContrasena.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             } else {
                 //Ocultar contraseña
-                mContrasena.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                campoContrasena.setTransformationMethod(PasswordTransformationMethod.getInstance());
             }
         });
     }
 
     public void iniciarSesion(View view) {
-        correo = mCorreo.getText().toString().trim();
-        contrasena = mContrasena.getText().toString().trim();
+        correo = campoCorreo.getText().toString().trim();
+        contrasena = campoContrasena.getText().toString().trim();
+        verificarCredenciales(correo, contrasena);
+    }
 
-        mAuth.signInWithEmailAndPassword(correo, contrasena)
+    private void verificarCredenciales(String correoUsuario, String contraseñaUsuario) {
+        mAuth.signInWithEmailAndPassword(correoUsuario, contraseñaUsuario)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(), "Sesion iniciada correctamente", Toast.LENGTH_SHORT).show();
+                        mostrarMensaje("Sesion iniciada correctamente");
                         Intent i = new Intent(InicioSesion.this, Inicio.class);
                         startActivity(i);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
+                        mostrarMensaje("Credenciales incorrectas");
                     }
                 });
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_SHORT).show();
     }
 }

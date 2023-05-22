@@ -4,11 +4,6 @@
         <shape android:shape="rectangle">
             <solid android:color="@color/azulMarino" />
             <corners android:radius="8dp" />
-            <padding
-                android:left="8dp"
-                android:top="8dp"
-                android:right="8dp"
-                android:bottom="8dp" />
         </shape>
     </item>
     <item android:drawable="@android:color/transparent" />

@@ -1,16 +1,12 @@
 package com.example.aplicaciongestindealumnos;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.UnderlineSpan;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,19 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
 public class PerfilAlumno extends AppCompatActivity {
     FirebaseStorage storage;
-    StorageReference storageRef;
-    String  nombre, curso,idFirebase, asignaturas;
+    String nombre, curso, idFirebase;
+    RecyclerView recyclerAsignatura;
+    AdaptadorAsignaturas adaptadorAsignatura;
+    ArrayList<String> listaAsignaturas;
     ImageView foto;
     Uri uriFoto;
     String fotografia;
-    Button botonDatoAlumno, botonAusencias, botonCalificaciones;
-    RecyclerView recycler;
     TextView volver;
 
     @Override
@@ -41,68 +36,50 @@ public class PerfilAlumno extends AppCompatActivity {
         setContentView(R.layout.activity_perfil_alumno);
 
         storage = SingletonFirebase.getStorage();
+        listaAsignaturas = new ArrayList<>();
 
-        Intent i = getIntent();
-        nombre = i.getStringExtra("nombreAlumno");
-        curso = i.getStringExtra("cursoAlumno");
-        idFirebase = i.getStringExtra("idAlumno");
-        fotografia = i.getStringExtra("fotoAlumno");
+        relacionXML();
+        recibirIntent();
+        accionTextoVolver();
+        cargarFoto();
+        generarAsignaturas();
+    }
+
+    private void relacionXML() {
         volver = findViewById(R.id.textoVolver);
+        foto = findViewById(R.id.imagenAlumnos);
+        recyclerAsignatura = findViewById(R.id.listaAsignaturas);
+    }
+
+    private void recibirIntent() {
+        Intent i = getIntent();
+        listaAsignaturas = i.getStringArrayListExtra("listaAsignaturas");
+        nombre = i.getStringExtra("nombre");
+        curso = i.getStringExtra("curso");
+        idFirebase = i.getStringExtra("idAlumno");
+        fotografia = i.getStringExtra("foto");
+    }
+
+    private void accionTextoVolver() {
         SpannableString spannableString = new SpannableString("Volver");
         spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         volver.setText(spannableString);
-        foto = findViewById(R.id.imagenAlumnos);
-        botonDatoAlumno = findViewById(R.id.botonDatosAlumno);
-        botonAusencias = findViewById(R.id.botonAusencias);
-        botonCalificaciones = findViewById(R.id.botonCalificaciones);
+    }
 
+    private void cargarFoto() {
         Glide.with(this)
                 .load(fotografia)
                 .into(foto);
-
     }
 
-    public void datosAlumno(View view) {
-        TextView datoNombre;
-        TextView datoCurso;
-        ArrayList<String> asignaturasAlumno;
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.activity_datos_alumno, null);
-        builder.setView(dialogView);
-
-        datoNombre = dialogView.findViewById(R.id.datoNombre);
-        datoCurso = dialogView.findViewById(R.id.datoCurso);
-        recycler = dialogView.findViewById(R.id.listaAlumnos);
-
-        datoNombre.setText("Nombre: " + nombre);
-        datoCurso.setText("Curso: " + curso);
-
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
-        recycler.setLayoutManager(layoutManager);
-
-        asignaturasAlumno = new ArrayList<>();
-        asignaturasAlumno.add("Mates");
-        asignaturasAlumno.add("Lengua");
-        asignaturasAlumno.add("Ingles");
-        asignaturasAlumno.add("Historia");
-
-        AdaptadorAsignaturas adaptador = new AdaptadorAsignaturas(asignaturasAlumno);
-        recycler.setAdapter(adaptador);
-
-        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+    private void generarAsignaturas() {
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
+        recyclerAsignatura.setLayoutManager(layoutManager);
+        adaptadorAsignatura = new AdaptadorAsignaturas(listaAsignaturas);
+        recyclerAsignatura.setAdapter(adaptadorAsignatura);
     }
+
     public void volverAtras(View view) {
-        // Acción de volver atrás
         onBackPressed();
     }
 }

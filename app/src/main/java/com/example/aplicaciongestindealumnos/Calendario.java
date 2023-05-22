@@ -1,7 +1,6 @@
 package com.example.aplicaciongestindealumnos;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -16,10 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
@@ -42,29 +38,32 @@ public class Calendario extends AppCompatActivity implements AdaptadorNotaCalend
     String emailDB;
     String diaSeleccionado;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendario);
 
+        fechaSeleccionada = LocalDate.now();
+        relacionXML();
+        recibirIntent();
+        inicializarFirebase();
+        setMesView();
+    }
+    private void relacionXML() {
+        calendarRecyclerView = findViewById(R.id.calendarRecyclerView);
+        textoMesAño = findViewById(R.id.campoMesAño);
+        notaCalendario = findViewById(R.id.notas);
+    }
+    private void recibirIntent(){
         listaNotasCalendario = new ArrayList<>();
-        db = SingletonFirebase.getFireBase();
         Intent i = getIntent();
         listaNotasCalendario = i.getParcelableArrayListExtra("listaNotasCalendario");
         emailDB = i.getStringExtra("correoUsuario");
+    }
+    private void inicializarFirebase(){
+        db = SingletonFirebase.getFireBase();
         alumnosRefDB = db.collection("users").document(emailDB).collection("notasCalendario");
-        initWidgets();
-        fechaSeleccionada = LocalDate.now();
-        notaCalendario = findViewById(R.id.notas);
-        setMesView();
     }
-
-    private void initWidgets() {
-        calendarRecyclerView = findViewById(R.id.calendarRecyclerView);
-        textoMesAño = findViewById(R.id.campoMesAño);
-    }
-
     private void setMesView() {
         textoMesAño.setText(formarFechaCalendario(fechaSeleccionada));
         ArrayList<String> diasDelMes = diasMesArray(fechaSeleccionada);
@@ -113,102 +112,81 @@ public class Calendario extends AppCompatActivity implements AdaptadorNotaCalend
     }
 
     public void anadirNota(View view) {
-
         if (diaSeleccionado == null) {
-            Toast.makeText(getApplicationContext(), "Debe seleccionar una fecha", Toast.LENGTH_SHORT).show();
+            mostrarMensajeToast("Debe seleccionar una fecha");
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(Calendario.this);
-            builder.setTitle("Añadir nota al dia " + diaSeleccionado + " " + formarFechaCalendario(fechaSeleccionada));
-
-            // Crear el campo de texto multilinea
-            EditText campoEscribirNota = new EditText(Calendario.this);
-            campoEscribirNota.setMinLines(1);
-            campoEscribirNota.setMaxLines(5);
-
-            LinearLayout layoutCampos = new LinearLayout(Calendario.this);
-            layoutCampos.setOrientation(LinearLayout.VERTICAL);
-            layoutCampos.setGravity(Gravity.CENTER);
-            layoutCampos.setPadding(50, 50, 50, 50);
-
-            layoutCampos.addView(campoEscribirNota);
-
-            builder.setView(layoutCampos);
-
-            // Agregar botón "Añadir"
-            builder.setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String textoNota = campoEscribirNota.getText().toString().trim();
-                    notaCalendario.setText(textoNota);
-
-                    if (textoNota.equals("")) {
-                        Toast.makeText(getApplicationContext(), "Ingrese un nota", Toast.LENGTH_SHORT).show();
-                    } else {
-                        alumnosRefDB.document(formarFechaBasica(fechaSeleccionada, diaSeleccionado)).get()
-                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        if (documentSnapshot.exists()) {
-                                            // El documento ya existe, actualizar la nota
-                                            alumnosRefDB.document(formarFechaBasica(fechaSeleccionada, diaSeleccionado))
-                                                    .update("nota", textoNota)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            notaCalendario.setText(textoNota);
-                                                            listaNotasCalendario.add(new NotaCalendario(formarFechaBasica(fechaSeleccionada, diaSeleccionado), textoNota));
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(Calendario.this, "Error al actualizar la nota", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                        } else {
-                                            // El documento no existe, crear un nuevo documento con la nueva nota
-                                            Map<String, Object> notaMap = new HashMap<>();
-                                            notaMap.put("nota", textoNota);
-
-                                            alumnosRefDB.document(formarFechaBasica(fechaSeleccionada, diaSeleccionado))
-                                                    .set(notaMap, SetOptions.merge())
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            notaCalendario.setText(textoNota);
-                                                            listaNotasCalendario.add(new NotaCalendario(formarFechaBasica(fechaSeleccionada, diaSeleccionado), textoNota));
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(Calendario.this, "Error al crear el documento", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                        }
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(Calendario.this, "Error al verificar la existencia del documento", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                }
-            });
-
-            // Agregar botón "Cancelar"
-            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            mostrarDialogoAnadirNota();
         }
+    }
+
+    private void mostrarMensajeToast(String mensaje) {
+        Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_SHORT).show();
+    }
+
+    private void mostrarDialogoAnadirNota() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Calendario.this);
+        builder.setTitle("Añadir nota al día " + diaSeleccionado + " " + formarFechaCalendario(fechaSeleccionada));
+
+        EditText campoEscribirNota = new EditText(Calendario.this);
+        LinearLayout layoutCampos = new LinearLayout(Calendario.this);
+
+        layoutCampos.setOrientation(LinearLayout.VERTICAL);
+        layoutCampos.setGravity(Gravity.CENTER);
+        layoutCampos.setPadding(50, 50, 50, 50);
+        layoutCampos.addView(campoEscribirNota);
+
+        builder.setView(layoutCampos);
+
+        builder.setPositiveButton("Añadir", (dialog, which) -> {
+            String textoNota = campoEscribirNota.getText().toString().trim();
+            notaCalendario.setText(textoNota);
+
+            if (textoNota.equals("")) {
+                mostrarMensajeToast("Ingrese una nota");
+            } else {
+                crearNota(textoNota);
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void crearNota(String textoNota) {
+        alumnosRefDB.document(formarFechaBasica(fechaSeleccionada, diaSeleccionado)).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        actualizarNotaExistente(textoNota);
+                    } else {
+                        crearNuevaNota(textoNota);
+                    }
+                })
+                .addOnFailureListener(e -> mostrarMensajeToast("Error al verificar la existencia del documento"));
+    }
+
+    private void actualizarNotaExistente(String textoNota) {
+        alumnosRefDB.document(formarFechaBasica(fechaSeleccionada, diaSeleccionado))
+                .update("nota", textoNota)
+                .addOnSuccessListener(aVoid -> {
+                    notaCalendario.setText(textoNota);
+                    listaNotasCalendario.add(new NotaCalendario(formarFechaBasica(fechaSeleccionada, diaSeleccionado), textoNota));
+                })
+                .addOnFailureListener(e -> mostrarMensajeToast("Error al actualizar la nota"));
+    }
+
+    private void crearNuevaNota(String textoNota) {
+        Map<String, Object> notaMap = new HashMap<>();
+        notaMap.put("nota", textoNota);
+
+        alumnosRefDB.document(formarFechaBasica(fechaSeleccionada, diaSeleccionado))
+                .set(notaMap, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> {
+                    notaCalendario.setText(textoNota);
+                    listaNotasCalendario.add(new NotaCalendario(formarFechaBasica(fechaSeleccionada, diaSeleccionado), textoNota));
+                })
+                .addOnFailureListener(e -> mostrarMensajeToast("Error al crear el documento"));
     }
 
     public void volverAtras(View view) {

@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class AdaptadorAsignaturas extends RecyclerView.Adapter<AdaptadorAsignaturas.ViewHolderDatos>{
+public class AdaptadorAsignaturas extends RecyclerView.Adapter<AdaptadorAsignaturas.ViewHolder> {
 
-    ArrayList<String> listaAsignaturas;
+    private ArrayList<String> listaAsignaturas;
 
     public AdaptadorAsignaturas(ArrayList<String> listaAsignaturas) {
         this.listaAsignaturas = listaAsignaturas;
@@ -20,15 +20,16 @@ public class AdaptadorAsignaturas extends RecyclerView.Adapter<AdaptadorAsignatu
 
     @NonNull
     @Override
-    public AdaptadorAsignaturas.ViewHolderDatos onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_asignatura,null,false);
-        return new ViewHolderDatos(view);
+                .inflate(R.layout.item_asignatura, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdaptadorAsignaturas.ViewHolderDatos holder, int position) {
-        holder.asignarDatos(listaAsignaturas.get(position));
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        String elemento = listaAsignaturas.get(position);
+        holder.textViewItem.setText(elemento);
     }
 
     @Override
@@ -36,16 +37,13 @@ public class AdaptadorAsignaturas extends RecyclerView.Adapter<AdaptadorAsignatu
         return listaAsignaturas.size();
     }
 
-    public class ViewHolderDatos extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView asignatura;
-        public ViewHolderDatos(@NonNull View itemView) {
+        TextView textViewItem;
+
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            asignatura = itemView.findViewById(R.id.asignatura);
-        }
-
-        public void asignarDatos(String datos) {
-            asignatura.setText(datos);
+            textViewItem = itemView.findViewById(R.id.asignatura);
         }
     }
 }

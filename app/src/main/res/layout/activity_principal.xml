@@ -53,7 +53,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
             android:background="@drawable/botones"
-            android:onClick="ConsultarAlumnos"
+            android:onClick="intentConsultarAlumnos"
             android:text="@string/consulta_alumnos"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
@@ -66,7 +66,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
-            android:onClick="RegistroAlumnos"
+            android:onClick="intentRegistroAlumnos"
             android:text="@string/registro_alumnos"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
@@ -77,7 +77,7 @@
             android:layout_below="@id/botonRegistro"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:onClick="crearAsignaturas"
+            android:onClick="intentRegistroAsignaturas"
             android:background="@drawable/botones"
             android:text="Creación de asignaturas"
             android:textColor="@color/blanco"
@@ -91,7 +91,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
-            android:onClick="Calendario"
+            android:onClick="intentCalendario"
             android:text="@string/calendario"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
