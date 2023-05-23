@@ -131,8 +131,10 @@ public class Inicio extends AppCompatActivity {
                     String nombre = document.getString("nombre");
                     String curso = document.getString("curso");
                     String urlImagen = document.getString("url_imagen");
+                    ArrayList asignaturas = (ArrayList<String>) document.get("asignaturas");
                     Uri uriUrlImagen = Uri.parse(urlImagen);
-                    listaAlumnos.add(new Alumno(uriUrlImagen, nombre, curso, idFireBase));
+
+                    listaAlumnos.add(new Alumno(uriUrlImagen, nombre, curso, idFireBase,asignaturas));
                 }
             }
         });
@@ -170,15 +172,15 @@ public class Inicio extends AppCompatActivity {
     public void intentRegistroAlumnos(View view) {
         Intent i = new Intent(Inicio.this, RegistroAlumnos.class);
         i.putExtra("listaAlumnos", listaAlumnos);
+        i.putStringArrayListExtra("listaAsignaturas", listaAsignaturas);
         i.putExtra("correoUsuario", emailDB);
         startActivity(i);
     }
 
     public void intentConsultarAlumnos(View view) {
         Intent i = new Intent(Inicio.this, ConsultarAlumnos.class);
-        i.putExtra("listaAlumnos", listaAlumnos);
-        i.putStringArrayListExtra("listaAsignaturas", listaAsignaturas);
         i.putExtra("correoUsuario", emailDB);
+        i.putExtra("listaAlumnos", listaAlumnos);
         startActivity(i);
     }
 

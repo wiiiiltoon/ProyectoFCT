@@ -14,9 +14,9 @@ tools:context=".PerfilAlumno">
         tools:layout_editor_absoluteY="0dp">
 
         <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:padding="40dp">
 
             <TextView
@@ -50,6 +50,7 @@ tools:context=".PerfilAlumno">
                 android:id="@+id/datoNombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/contenedor_campos"
                 android:layout_below="@id/imagenAlumnos"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="20sp"
@@ -62,24 +63,53 @@ tools:context=".PerfilAlumno">
             <TextView
                 android:id="@+id/datoCurso"
                 android:layout_width="wrap_content"
+                android:background="@drawable/contenedor_campos"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/datoNombre"
                 android:layout_centerHorizontal="true"
-                android:layout_marginStart="20sp"
                 android:layout_marginTop="10dp"
                 android:text="Curso: 2º Bachillerato"
                 android:textAllCaps="false"
                 android:textColor="@color/titulo"
                 android:textSize="20sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/listaAsignaturas"
+            <LinearLayout
+                android:id="@+id/contAsignaturas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/datoCurso"
-                android:layout_gravity="center"
-                android:layout_marginTop="20sp" />
+                android:gravity="center"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/listaformato"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/textoAsignaturas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/datoCurso"
+                    android:text="Asignaturas"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="20sp"
+                    android:textColor="@color/titulo"
+                    android:textSize="20sp" />
+
+                <GridLayout
+                    android:id="@+id/gridAsignaturas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textoAsignaturas"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20sp"
+                    android:alignmentMode="alignMargins"
+                    android:layout_marginBottom="20sp"
+                    android:columnCount="2"
+                    android:gravity="center"
+                    android:rowCount="2"
+                    android:useDefaultMargins="true">
+
+                </GridLayout>
+            </LinearLayout>
         </RelativeLayout>
 
     </ScrollView>

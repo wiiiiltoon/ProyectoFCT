@@ -30,7 +30,6 @@ public class ConsultarAlumnos extends AppCompatActivity {
     private Uri uriElegidaCliente;
     private StorageReference storageRef;
     private ArrayList<Alumno> listaAlumnos;
-    private ArrayList<String> listaAsignaturas;
     private ListView listViewAlumnos;
     private AdaptadorAlumnos adaptadorAlumnos;
     private ImageView imagenSeleccionada;
@@ -63,7 +62,6 @@ public class ConsultarAlumnos extends AppCompatActivity {
         Intent i = getIntent();
         emailDB = i.getStringExtra("correoUsuario");
         listaAlumnos = i.getParcelableArrayListExtra("listaAlumnos");
-        listaAsignaturas = i.getStringArrayListExtra("listaAsignaturas");
     }
     private void inicializarFirebase() {
         db = SingletonFirebase.getFireBase();
@@ -79,19 +77,20 @@ public class ConsultarAlumnos extends AppCompatActivity {
             String nombre = alumnoSeleccionado.getNombre();
             String curso = alumnoSeleccionado.getCurso();
             String idAlumno = alumnoSeleccionado.getIdFireBase();
+            ArrayList asignaturas = alumnoSeleccionado.getAsignaturas();
             Uri foto = alumnoSeleccionado.getUrlFoto();
 
-            abrirPerfilAlumno(nombre,curso,idAlumno,foto);
+            abrirPerfilAlumno(nombre,curso,idAlumno,foto,asignaturas);
         });
     }
 
-    private void abrirPerfilAlumno(String nombre,String curso, String id, Uri foto){
+    private void abrirPerfilAlumno(String nombre,String curso, String id, Uri foto, ArrayList asignaturas){
         Intent i = new Intent(ConsultarAlumnos.this, PerfilAlumno.class);
-        i.putStringArrayListExtra("listaAsignaturas", listaAsignaturas);
         i.putExtra("nombre", nombre);
         i.putExtra("curso", curso);
         i.putExtra("id", id);
         i.putExtra("foto", foto.toString());
+        i.putStringArrayListExtra("listaAsignaturas",asignaturas);
         startActivity(i);
         Toast.makeText(getApplicationContext(), foto.toString(), Toast.LENGTH_SHORT).show();
     }

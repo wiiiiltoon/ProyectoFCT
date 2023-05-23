@@ -1,18 +1,21 @@
 package com.example.aplicaciongestindealumnos;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.UnderlineSpan;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
@@ -21,9 +24,9 @@ import java.util.ArrayList;
 
 public class PerfilAlumno extends AppCompatActivity {
     FirebaseStorage storage;
+    TextView campoNombre, campoCurso;
     String nombre, curso, idFirebase;
-    RecyclerView recyclerAsignatura;
-    AdaptadorAsignaturas adaptadorAsignatura;
+    GridLayout gridAsignaturas;
     ArrayList<String> listaAsignaturas;
     ImageView foto;
     Uri uriFoto;
@@ -41,14 +44,16 @@ public class PerfilAlumno extends AppCompatActivity {
         relacionXML();
         recibirIntent();
         accionTextoVolver();
-        cargarFoto();
+        cargarDatosAlumno();
         generarAsignaturas();
     }
 
     private void relacionXML() {
+        campoNombre = findViewById(R.id.datoNombre);
+        campoCurso = findViewById(R.id.datoCurso);
         volver = findViewById(R.id.textoVolver);
         foto = findViewById(R.id.imagenAlumnos);
-        recyclerAsignatura = findViewById(R.id.listaAsignaturas);
+        gridAsignaturas = findViewById(R.id.gridAsignaturas);
     }
 
     private void recibirIntent() {
@@ -66,18 +71,31 @@ public class PerfilAlumno extends AppCompatActivity {
         volver.setText(spannableString);
     }
 
-    private void cargarFoto() {
+    private void cargarDatosAlumno() {
+        campoNombre.setText("Nombre: "+nombre);
+        campoCurso.setText("Curso: "+curso);
         Glide.with(this)
                 .load(fotografia)
                 .into(foto);
     }
 
     private void generarAsignaturas() {
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
-        recyclerAsignatura.setLayoutManager(layoutManager);
-        adaptadorAsignatura = new AdaptadorAsignaturas(listaAsignaturas);
-        recyclerAsignatura.setAdapter(adaptadorAsignatura);
+        GridLayout gridLayout = findViewById(R.id.gridAsignaturas);
+        for (String nombre : listaAsignaturas) {
+            Button button = new Button(this);
+            button.setText(nombre);
+            button.setTextColor(Color.WHITE);
+            button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            button.setBackgroundResource(R.drawable.botones);
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.setGravity(Gravity.CENTER);
+            params.width = 350;
+            button.setLayoutParams(params);
+
+            gridLayout.addView(button);
+        }
     }
+
 
     public void volverAtras(View view) {
         onBackPressed();

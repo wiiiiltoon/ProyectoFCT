@@ -3,9 +3,10 @@ package com.example.aplicaciongestindealumnos;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
 
 public class Alumno implements Parcelable {
 
@@ -13,12 +14,14 @@ public class Alumno implements Parcelable {
     private String nombre;
     private String curso;
     private String idFirebase;
+    private ArrayList asignaturas;
 
-    public Alumno(Uri urlFoto,String nombre, String curso,String idFirebase){
+    public Alumno(Uri urlFoto, String nombre, String curso, String idFirebase, ArrayList asignaturas){
         this.urlFoto = urlFoto;
         this.nombre = nombre;
         this.curso = curso;
         this.idFirebase = idFirebase;
+        this.asignaturas = asignaturas;
     }
 
     protected Alumno(Parcel in) {
@@ -26,6 +29,7 @@ public class Alumno implements Parcelable {
         nombre = in.readString();
         curso = in.readString();
         idFirebase = in.readString();
+        asignaturas = in.readArrayList(null);
     }
 
     public static final Creator<Alumno> CREATOR = new Creator<Alumno>() {
@@ -55,6 +59,10 @@ public class Alumno implements Parcelable {
         return curso;
     }
 
+    public ArrayList getAsignaturas() {
+        return asignaturas;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -66,5 +74,6 @@ public class Alumno implements Parcelable {
         dest.writeString(nombre);
         dest.writeString(curso);
         dest.writeString(idFirebase);
+        dest.writeList(asignaturas);
     }
 }
