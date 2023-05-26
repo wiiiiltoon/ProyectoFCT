@@ -271,13 +271,13 @@ public class RegistroAlumnos extends AppCompatActivity {
         return "alumno_" + timestamp + ".jpg";
     }
 
-    private void subirImagenFirebase(StorageReference imageRef, String nuevoID, String nombre, String curso,ArrayList asignaturasAlumno) {
+    private void subirImagenFirebase(StorageReference imageRef, String nuevoID, String nombre, String curso,ArrayList<String> asignaturasAlumno) {
         UploadTask uploadTask = imageRef.putFile(uriElegidaCliente);
 
         uploadTask.addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> anadirAlumnoDB(downloadUrl, nombre, curso, nuevoID, asignaturasAlumno))).addOnFailureListener(e -> mostrarMensaje("Error al subir la imagen"));
     }
 
-    private void anadirAlumnoDB(Uri downloadUrl, String nombre, String curso, String nuevoID, ArrayList asignaturasAlumno) {
+    private void anadirAlumnoDB2(Uri downloadUrl, String nombre, String curso, String nuevoID, ArrayList<String> asignaturasAlumno) {
         String urlImagen = downloadUrl.toString();
         Map<String, Object> nuevoAlumnoMap = new HashMap<>();
         nuevoAlumnoMap.put("nombre", nombre);
@@ -289,8 +289,35 @@ public class RegistroAlumnos extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> anadirAlumnoListaLocal(downloadUrl, nombre, curso, nuevoID,asignaturasAlumno))
                 .addOnFailureListener(e -> mostrarMensaje("Error al agregar alumno a Firestore"));
     }
+    private void anadirAlumnoDB(Uri downloadUrl, String nombre, String curso, String nuevoID, ArrayList<String> asignaturasAlumno) {
+        String urlImagen = downloadUrl.toString();
+        Map<String, Object> nuevoAlumnoMap = new HashMap<>();
+        nuevoAlumnoMap.put("nombre", nombre);
+        nuevoAlumnoMap.put("curso", curso);
+        nuevoAlumnoMap.put("url_imagen", urlImagen);
 
-    private void anadirAlumnoListaLocal(Uri imagen, String nombre, String curso, String nuevoID,ArrayList asignaturasAlumno) {
+        alumnosRefDB.document(nuevoID).set(nuevoAlumnoMap)
+                .addOnSuccessListener(aVoid -> {
+                    for (String asignatura : asignaturasAlumno) {
+                        alumnosRefDB.document(nuevoID).collection("asignaturas").add(createAsignaturaData(asignatura))
+                                .addOnSuccessListener(documentReference -> {
+                                })
+                                .addOnFailureListener(e -> mostrarMensaje("Error al agregar asignatura a Firestore"));
+                    }
+                    anadirAlumnoListaLocal(downloadUrl, nombre, curso, nuevoID, asignaturasAlumno);
+                })
+                .addOnFailureListener(e -> mostrarMensaje("Error al agregar alumno a Firestore"));
+    }
+
+    private Map<String, Object> createAsignaturaData(String nombreAsignatura) {
+        Map<String, Object> asignaturaMap = new HashMap<>();
+        asignaturaMap.put("nombre", nombreAsignatura);
+        asignaturaMap.put("calificaciones", new ArrayList<>());
+        asignaturaMap.put("faltas", 0);
+        return asignaturaMap;
+    }
+
+    private void anadirAlumnoListaLocal(Uri imagen, String nombre, String curso, String nuevoID,ArrayList<String> asignaturasAlumno) {
         listaAlumnos.add(new Alumno(imagen, nombre, curso, nuevoID,asignaturasAlumno));
         adaptadorAlumnos = new AdaptadorAlumnos(RegistroAlumnos.this, listaAlumnos);
         listViewAlumnos.setAdapter(adaptadorAlumnos);

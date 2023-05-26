@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -131,15 +132,27 @@ public class Inicio extends AppCompatActivity {
                     String nombre = document.getString("nombre");
                     String curso = document.getString("curso");
                     String urlImagen = document.getString("url_imagen");
-                    ArrayList asignaturas = (ArrayList<String>) document.get("asignaturas");
                     Uri uriUrlImagen = Uri.parse(urlImagen);
 
-                    listaAlumnos.add(new Alumno(uriUrlImagen, nombre, curso, idFireBase,asignaturas));
+                    obtenerAsignaturasAlumno(idFireBase,nombre,curso,uriUrlImagen);
                 }
             }
         });
     }
+    private void obtenerAsignaturasAlumno(String idFireBase, String nombre, String curso, Uri uriUrlImagen){
+        alumnosRefDB.document(idFireBase).collection("asignaturas").get().addOnCompleteListener(asignaturasTask -> {
+            if (asignaturasTask.isSuccessful()) {
+                ArrayList<String> asignaturas = new ArrayList<>();
+                for (QueryDocumentSnapshot asignaturaDoc : asignaturasTask.getResult()) {
+                    String nombreAsignatura = asignaturaDoc.getString("nombre");
+                    asignaturas.add(nombreAsignatura);
+                    mostrarMensaje(nombreAsignatura);
+                }
 
+                listaAlumnos.add(new Alumno(uriUrlImagen, nombre, curso, idFireBase, asignaturas));
+            }
+        });
+    }
     private void cargarAsignaturas() {
         listaAsignaturas.clear();
         asignaturasRefDB.get().addOnCompleteListener(task -> {
@@ -171,10 +184,11 @@ public class Inicio extends AppCompatActivity {
 
     public void intentRegistroAlumnos(View view) {
         Intent i = new Intent(Inicio.this, RegistroAlumnos.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.putExtra("listaAlumnos", listaAlumnos);
         i.putStringArrayListExtra("listaAsignaturas", listaAsignaturas);
         i.putExtra("correoUsuario", emailDB);
-        startActivity(i);
+        Inicio.this.startActivity(i);
     }
 
     public void intentConsultarAlumnos(View view) {
@@ -215,5 +229,8 @@ public class Inicio extends AppCompatActivity {
         });
         builder.setNegativeButton("No", null);
         builder.show();
+    }
+    private void mostrarMensaje(String mensaje) {
+        Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_SHORT).show();
     }
 }

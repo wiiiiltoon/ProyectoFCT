@@ -30,7 +30,7 @@ public class PerfilAlumno extends AppCompatActivity {
     ArrayList<String> listaAsignaturas;
     ImageView foto;
     Uri uriFoto;
-    String fotografia;
+    String fotografia, emailDB;
     TextView volver;
 
     @Override
@@ -59,9 +59,10 @@ public class PerfilAlumno extends AppCompatActivity {
     private void recibirIntent() {
         Intent i = getIntent();
         listaAsignaturas = i.getStringArrayListExtra("listaAsignaturas");
+        emailDB = i.getStringExtra("emailDB");
         nombre = i.getStringExtra("nombre");
         curso = i.getStringExtra("curso");
-        idFirebase = i.getStringExtra("idAlumno");
+        idFirebase = i.getStringExtra("idFirebase");
         fotografia = i.getStringExtra("foto");
     }
 
@@ -72,8 +73,8 @@ public class PerfilAlumno extends AppCompatActivity {
     }
 
     private void cargarDatosAlumno() {
-        campoNombre.setText("Nombre: "+nombre);
-        campoCurso.setText("Curso: "+curso);
+        campoNombre.setText(nombre);
+        campoCurso.setText(curso);
         Glide.with(this)
                 .load(fotografia)
                 .into(foto);
@@ -91,6 +92,13 @@ public class PerfilAlumno extends AppCompatActivity {
             params.setGravity(Gravity.CENTER);
             params.width = 350;
             button.setLayoutParams(params);
+            button.setOnClickListener(v -> {
+                Intent intent = new Intent(PerfilAlumno.this, AlumnoAsignatura.class);
+                intent.putExtra("idFirebase", idFirebase);
+                intent.putExtra("nombreAsignatura", nombre);
+                intent.putExtra("emailDB", emailDB);
+                startActivity(intent);
+            });
 
             gridLayout.addView(button);
         }

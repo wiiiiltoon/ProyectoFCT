@@ -86,9 +86,10 @@ public class ConsultarAlumnos extends AppCompatActivity {
 
     private void abrirPerfilAlumno(String nombre,String curso, String id, Uri foto, ArrayList asignaturas){
         Intent i = new Intent(ConsultarAlumnos.this, PerfilAlumno.class);
+        i.putExtra("emailDB", emailDB);
         i.putExtra("nombre", nombre);
         i.putExtra("curso", curso);
-        i.putExtra("id", id);
+        i.putExtra("idFirebase", id);
         i.putExtra("foto", foto.toString());
         i.putStringArrayListExtra("listaAsignaturas",asignaturas);
         startActivity(i);
