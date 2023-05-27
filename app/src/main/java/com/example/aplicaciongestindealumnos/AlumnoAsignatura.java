@@ -36,6 +36,7 @@ public class AlumnoAsignatura extends AppCompatActivity {
         inicilizarFirebase();
 
         calificaciones = new ArrayList<>();
+
         asignaturasCollection = db.collection("users").document(emailDB).collection("alumnos")
                 .document(idFirebase).collection("asignaturas");
         adapter = new AdaptadorCalificaciones(this, calificaciones);

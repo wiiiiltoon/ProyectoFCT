@@ -7,7 +7,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +31,6 @@ public class ConsultarAlumnos extends AppCompatActivity {
     private ArrayList<Alumno> listaAlumnos;
     private ListView listViewAlumnos;
     private AdaptadorAlumnos adaptadorAlumnos;
-    private ImageView imagenSeleccionada;
     private String emailDB;
     private TextView volver;
 
@@ -108,15 +106,5 @@ public class ConsultarAlumnos extends AppCompatActivity {
 
     public void volverAtras(View view) {
         onBackPressed();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            uriElegidaCliente = data.getData();
-            imagenSeleccionada.setImageURI(uriElegidaCliente);
-        }
     }
 }

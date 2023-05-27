@@ -66,7 +66,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/botones"
-            android:onClick="intentRegistroAlumnos"
+            android:onClick="RegistroAlumnos"
             android:text="@string/registro_alumnos"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
@@ -77,7 +77,7 @@
             android:layout_below="@id/botonRegistro"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:onClick="intentRegistroAsignaturas"
+            android:onClick="registrarAsignaturas"
             android:background="@drawable/botones"
             android:text="Creación de asignaturas"
             android:textColor="@color/blanco"
@@ -95,6 +95,18 @@
             android:text="@string/calendario"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
+        <Button
+            android:id="@+id/botonCalificacion"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/botonCalendario"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/botones"
+            android:onClick="intentRegistroCalificacion"
+            android:text="Registro calificacion"
+            android:textColor="@color/blanco"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/botonInforme"
@@ -105,7 +117,7 @@
             android:paddingHorizontal="20dp"
             android:text="@string/generar_informe"
             android:layout_marginTop="30dp"
-            android:layout_below="@id/botonCalendario"
+            android:layout_below="@id/botonCalificacion"
             android:textColor="@color/blanco"
             android:textSize="16sp" />
 
