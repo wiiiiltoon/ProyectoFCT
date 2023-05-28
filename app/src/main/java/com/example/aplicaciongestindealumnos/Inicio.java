@@ -376,10 +376,12 @@ public class Inicio extends AppCompatActivity {
     }
 
     public void intentRegistroCalificacion(View view) {
-
-        new RegistroCalificacion(this, gestorAlumnos.obtenerTodosAlumnos());
+        if(gestorAlumnos.obtenerTodosAlumnos().size()==0){
+            mostrarMensaje("No hay alumnos registrados");
+        }else{
+            new RegistroCalificacion(this, gestorAlumnos.obtenerTodosAlumnos(), emailDB);
+        }
     }
-
     @Override
     public void onBackPressed() {
         mostrarCerrarSesion();

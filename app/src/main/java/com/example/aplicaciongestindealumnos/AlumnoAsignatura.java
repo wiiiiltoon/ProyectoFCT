@@ -14,7 +14,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class AlumnoAsignatura extends AppCompatActivity {
 
@@ -85,7 +84,6 @@ public class AlumnoAsignatura extends AppCompatActivity {
                 for (QueryDocumentSnapshot documentCalificacion : task.getResult()) {
                     Calificacion calificacion = crearCalificacionDesdeDocumento(documentCalificacion);
                     calificaciones.add(calificacion);
-                    calificaciones.add(new Calificacion(new Date(), "Examen historia", 10));
                     adapter.notifyDataSetChanged();
                 }
             } else {

@@ -21,23 +21,27 @@
         android:text="Seleccionar imagen" />
 
     <EditText
+        android:layout_marginTop="8sp"
         android:id="@+id/campoNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nombre y apellidos" />
 
     <EditText
+        android:layout_marginTop="8sp"
         android:id="@+id/campoAñoCurso"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Año del curso" />
 
     <Spinner
+        android:layout_marginTop="8sp"
         android:id="@+id/spinnerNivelEducativo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <ScrollView
+        android:layout_marginTop="8sp"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
