@@ -21,6 +21,10 @@ public class GestorAlumnos  {
         return listaAlumnos;
     }
 
+    public void setListaAlumnos(ArrayList<Alumno> listaAlumnos) {
+        this.listaAlumnos = listaAlumnos;
+    }
+
     public Alumno obtenerAlumno(String id) {
         for (Alumno alumno : listaAlumnos) {
             if (alumno.getIdFireBase().equals(id)) {

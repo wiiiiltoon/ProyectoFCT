@@ -20,7 +20,7 @@ public class AlumnoAsignatura extends AppCompatActivity {
     FirebaseFirestore db;
     CollectionReference asignaturasCollection;
     private GridView gridView;
-    private TextView titulo;
+    private TextView titulo, numFaltas;
     private String emailDB, idFirebase, nombreAsignatura;
     private ArrayList<Calificacion> calificaciones;
     private AdaptadorCalificaciones adapter;
@@ -34,20 +34,19 @@ public class AlumnoAsignatura extends AppCompatActivity {
         recogerIntent();
         inicilizarFirebase();
 
+        asignaturasCollection = db.collection("users").document(emailDB).collection("alumnos").document(idFirebase).collection("asignaturas");
         calificaciones = new ArrayList<>();
-
-        asignaturasCollection = db.collection("users").document(emailDB).collection("alumnos")
-                .document(idFirebase).collection("asignaturas");
         adapter = new AdaptadorCalificaciones(this, calificaciones);
         gridView.setAdapter(adapter);
-        cargarCalificaciones(nombreAsignatura);
 
-
+        obtenerAusencias(nombreAsignatura);
+        cargarDatos(nombreAsignatura);
     }
 
     private void relacionXML() {
         gridView = findViewById(R.id.gridAsignaturas);
         titulo = findViewById(R.id.titulo);
+        numFaltas = findViewById(R.id.numeroFaltas);
     }
 
     private void recogerIntent() {
@@ -62,12 +61,13 @@ public class AlumnoAsignatura extends AppCompatActivity {
         db = SingletonFirebase.getFireBase();
     }
 
-    private void cargarCalificaciones(String nombreAsig) {
+    private void cargarDatos(String nombreAsig) {
         asignaturasCollection.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot documentAsignatura : task.getResult()) {
                     if (documentAsignatura.getString("nombre").equals(nombreAsig)) {
                         obtenerCalificaciones(documentAsignatura.getId());
+
                     }
                 }
             } else {
@@ -99,6 +99,27 @@ public class AlumnoAsignatura extends AppCompatActivity {
         String nombre = document.getString("nombre");
         int nota = document.getLong("nota").intValue();
         return new Calificacion(fecha.toDate(), nombre, nota);
+    }
+
+    private void obtenerAusencias(String asignatura){
+        asignaturasCollection.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot documentAsignatura : task.getResult()) {
+                    if (documentAsignatura.getString("nombre").equals(asignatura)) {
+                        Long faltas = documentAsignatura.getLong("faltas");
+                        if (faltas != null) {
+                            numFaltas.setText(String.valueOf(faltas));
+                        } else {
+                            mostrarMensaje("Error al cargar las faltas");
+                        }
+                    }
+                }
+            } else {
+                mostrarMensaje("Error al cargar las calificaciones: " + task.getException().getMessage());
+            }
+        }).addOnFailureListener(e -> {
+            mostrarMensaje("Error al cargar las calificaciones: " + e.getMessage());
+        });
     }
 
     private void mostrarMensaje(String mensaje) {

@@ -17,6 +17,12 @@
         android:theme="@style/Theme.AplicacionGestiónDeAlumnos"
         tools:targetApi="31">
         <activity
+            android:name=".eleccion_registros"
+            android:exported="false" />
+        <activity
+            android:name=".eleccion_consultas"
+            android:exported="false" />
+        <activity
             android:name=".RegistroCalificacion"
             android:exported="false" />
         <activity
@@ -45,6 +51,9 @@
             android:exported="false" />
         <activity
             android:name=".RegistroAplicacion"
+            android:exported="false" />
+        <activity
+            android:name=".ConsultarAsignaturas"
             android:exported="false" />
         <activity
             android:name=".InicioSesion"

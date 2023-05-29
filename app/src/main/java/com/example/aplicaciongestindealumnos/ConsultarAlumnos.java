@@ -9,7 +9,6 @@ import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -91,7 +90,6 @@ public class ConsultarAlumnos extends AppCompatActivity {
         i.putExtra("foto", foto.toString());
         i.putStringArrayListExtra("listaAsignaturas",asignaturas);
         startActivity(i);
-        Toast.makeText(getApplicationContext(), foto.toString(), Toast.LENGTH_SHORT).show();
     }
     private void crearReferenciaStorage() {
         storageRef.getMetadata().addOnSuccessListener(storageMetadata -> {

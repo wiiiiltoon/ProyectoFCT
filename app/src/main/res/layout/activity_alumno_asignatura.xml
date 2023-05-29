@@ -66,7 +66,7 @@
 
         <LinearLayout
             android:id="@+id/faltasLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
@@ -79,24 +79,29 @@
             android:paddingTop="7sp"
             android:paddingRight="10sp"
             android:paddingBottom="7sp">
-
             <TextView
                 android:id="@+id/textoFaltas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10sp"
                 android:text="Faltas de asistencia totales:"
                 android:textColor="@color/negro"
                 android:textSize="18sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/numeroFaltas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/negro"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/numeroFaltas"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20sp"
-                android:layout_marginRight="10sp"
-                android:text="0"
-                android:textColor="@color/negro"
-                android:textSize="18sp" />
+
 
         </LinearLayout>
 

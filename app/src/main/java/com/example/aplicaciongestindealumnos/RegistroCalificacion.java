@@ -15,6 +15,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,13 +33,11 @@ public class RegistroCalificacion {
     private ArrayAdapter<String> asignaturaAdapter;
     private Spinner spinnerAlumnos;
     private Spinner spinnerAsignaturas;
-    private EditText editTextDescripcion;
-    private EditText editTextNota;
-    private String emailDB;
+    private EditText campoDescripcion;
+    private EditText campoNota;
 
     public RegistroCalificacion(Context context, ArrayList<Alumno> listaAlumnos, String emailDB) {
         this.context = context;
-        this.emailDB = emailDB;
         this.listaAlumnos = listaAlumnos;
 
         inicializarFirebase();
@@ -57,8 +56,8 @@ public class RegistroCalificacion {
 
         spinnerAlumnos = view.findViewById(R.id.spinner_alumnos);
         spinnerAsignaturas = view.findViewById(R.id.spinner_asignaturas);
-        editTextDescripcion = view.findViewById(R.id.edit_text_descripcion);
-        editTextNota = view.findViewById(R.id.edit_text_nota);
+        campoDescripcion = view.findViewById(R.id.edit_text_descripcion);
+        campoNota = view.findViewById(R.id.edit_text_nota);
 
         construirDialog(view);
     }
@@ -68,6 +67,7 @@ public class RegistroCalificacion {
         builder.setTitle("Agregar Calificación");
 
         List<String> nombresAlumnos = new ArrayList<>();
+        nombresAlumnos.add("Seleccione un alumno...");
         for (Alumno alumno : listaAlumnos) {
             nombresAlumnos.add(alumno.getNombre());
         }
@@ -81,8 +81,14 @@ public class RegistroCalificacion {
         spinnerAlumnos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Alumno alumnoSeleccionado = listaAlumnos.get(position);
-                cargarAsignaturasAlumno(alumnoSeleccionado);
+                if (position > 0) {
+                    Alumno alumnoSeleccionado = listaAlumnos.get(position - 1);
+                    cargarAsignaturasAlumno(alumnoSeleccionado);
+                } else {
+                    asignaturaAdapter.clear();
+                    campoDescripcion.setText("");
+                    campoNota.setText("");
+                }
             }
 
             @Override
@@ -94,12 +100,32 @@ public class RegistroCalificacion {
         builder.setView(view);
 
         builder.setPositiveButton("Añadir", (dialog, which) -> {
-            agregarCalificacion();
+            int posicionAlumno = spinnerAlumnos.getSelectedItemPosition();
+            if (posicionAlumno > 0) {
+                agregarCalificacion();
+            } else {
+                mostrarMensaje("Debe elegir un alumno");
+                try {
+                    Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                    field.setAccessible(true);
+                    field.set(dialog, false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
-        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Cancelar", (dialog, which) -> {
+            try {
+                Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                field.setAccessible(true);
+                field.set(dialog, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            dialog.dismiss();
+        });
 
-        // Mostrar el diálogo
         builder.create().show();
     }
 
@@ -107,8 +133,8 @@ public class RegistroCalificacion {
         int posicionAlumno = spinnerAlumnos.getSelectedItemPosition();
         Alumno alumno = listaAlumnos.get(posicionAlumno);
         String asignatura = (String) spinnerAsignaturas.getSelectedItem();
-        String descripcion = editTextDescripcion.getText().toString();
-        String notaText = editTextNota.getText().toString();
+        String descripcion = campoDescripcion.getText().toString();
+        String notaText = campoNota.getText().toString();
 
         if (descripcion.isEmpty()||notaText.isEmpty()) {
             mostrarMensaje("Debe rellenar los campos");

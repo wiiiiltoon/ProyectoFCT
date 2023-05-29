@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/azulFondo"
-    tools:context=".RegistroAsignaturas">
+    tools:context=".ConsultarAsignaturas">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,37 +33,13 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@id/textoVolver"
             android:textStyle="bold"
-            android:text="@string/creaci_n_asignatura"
+            android:text="Asignaturas"
             android:textSize="30sp" />
-
-        <EditText
-            android:id="@+id/campoAsignatura"
-            android:hint="@string/asignatura"
-            android:background="@drawable/contenedor_campos"
-
-            android:layout_width="250sp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/titulo"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="35sp"/>
-
-        <Button
-            android:id="@+id/botonCrear"
-            android:layout_width="150sp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/campoAsignatura"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20sp"
-            android:layout_marginBottom="35dp"
-            android:background="@drawable/botones"
-            android:onClick="crearAsignatura"
-
-            android:text="@string/crear"
-            android:textColor="@color/blanco" />
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/botonCrear"
+            android:layout_below="@+id/titulo"
+            android:layout_marginTop="35sp"
             android:layout_alignParentBottom="true"
             android:fillViewport="true"
             android:background="@drawable/listaformato">
