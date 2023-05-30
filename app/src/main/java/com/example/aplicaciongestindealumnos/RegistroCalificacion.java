@@ -52,17 +52,17 @@ public class RegistroCalificacion {
 
     private void mostrarDialog() {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.pantalla_registro_calificacion, null);
+        View view = inflater.inflate(R.layout.view_registro_calificacion, null);
 
         spinnerAlumnos = view.findViewById(R.id.spinner_alumnos);
         spinnerAsignaturas = view.findViewById(R.id.spinner_asignaturas);
         campoDescripcion = view.findViewById(R.id.edit_text_descripcion);
         campoNota = view.findViewById(R.id.edit_text_nota);
 
-        construirDialog(view);
+        registrarCalificacion(view);
     }
 
-    public void construirDialog(View view) {
+    public void registrarCalificacion(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Agregar Calificación");
 
@@ -131,7 +131,7 @@ public class RegistroCalificacion {
 
     private void agregarCalificacion() {
         int posicionAlumno = spinnerAlumnos.getSelectedItemPosition();
-        Alumno alumno = listaAlumnos.get(posicionAlumno);
+        Alumno alumno = listaAlumnos.get(posicionAlumno-1);
         String asignatura = (String) spinnerAsignaturas.getSelectedItem();
         String descripcion = campoDescripcion.getText().toString();
         String notaText = campoNota.getText().toString();

@@ -54,7 +54,7 @@ public class RegistroAusencia {
 
     private void mostrarDialog() {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.pantalla_registro_ausencia, null);
+        View view = inflater.inflate(R.layout.view_registro_ausencia, null);
 
         spinnerAlumnos = view.findViewById(R.id.spinner_alumnos);
         spinnerAsignaturas = view.findViewById(R.id.spinner_asignaturas);
@@ -173,7 +173,7 @@ public class RegistroAusencia {
 
     private void ingresarNuevaAusencia(int numAusencia) {
         int posicionAlumno = spinnerAlumnos.getSelectedItemPosition();
-        if (posicionAlumno > 0) { // Seleccionó un alumno válido
+        if (posicionAlumno > 0) {
             Alumno alumno = listaAlumnos.get(posicionAlumno - 1);
             String idFireBaseAlumno = alumno.getIdFireBase();
             String asignatura = (String) spinnerAsignaturas.getSelectedItem();
@@ -190,7 +190,7 @@ public class RegistroAusencia {
                             updates.put("faltas", numAusencia);
 
                             asignaturaRef.update(updates)
-                                    .addOnSuccessListener(aVoid -> mostrarMensaje("Faltas de " + alumno + " en " + asignatura + " actualizadas"))
+                                    .addOnSuccessListener(aVoid -> mostrarMensaje("Faltas de " + alumno.getNombre() + " en " + asignatura + " actualizadas"))
                                     .addOnFailureListener(e -> mostrarMensaje("No se pudo actualizar el número de faltas"));
                         }
                     }

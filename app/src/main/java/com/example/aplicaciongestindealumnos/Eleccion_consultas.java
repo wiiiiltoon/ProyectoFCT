@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-public class eleccion_consultas extends AppCompatActivity {
+public class Eleccion_consultas extends AppCompatActivity {
 
     Button botonAsiganturas, botonAlumnos;
     ArrayList<Alumno> listaAlumnos;
@@ -24,7 +24,7 @@ public class eleccion_consultas extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_eleccion_consultas);
+        setContentView(R.layout.eleccion_consultas);
 
         relacionXML();
         accionTextoVolver();
@@ -51,14 +51,14 @@ public class eleccion_consultas extends AppCompatActivity {
     }
 
     public void intentConsultarAlumnos(View view) {
-        Intent i = new Intent(eleccion_consultas.this, ConsultarAlumnos.class);
+        Intent i = new Intent(Eleccion_consultas.this, ConsultarAlumnos.class);
         i.putExtra("correoUsuario", emailDB);
         i.putExtra("listaAlumnos", listaAlumnos);
         startActivity(i);
     }
 
     public void intentConsultarAsignaturas(View view) {
-        Intent i = new Intent(eleccion_consultas.this, ConsultarAsignaturas.class);
+        Intent i = new Intent(Eleccion_consultas.this, ConsultarAsignaturas.class);
         i.putExtra("correoUsuario", emailDB);
         i.putExtra("listaAsignaturas", listaAsignaturas);
         startActivity(i);

@@ -72,7 +72,7 @@ public class RegistroAlumnos {
 
     public ArrayList<Alumno> mostrarDialog() {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.pantalla_registrar_alumno, null);
+        View view = inflater.inflate(R.layout.view_registrar_alumno, null);
 
         imagenRecortada = view.findViewById(R.id.imagenRecortada);
         Button botonImagen = view.findViewById(R.id.botonImagen);

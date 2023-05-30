@@ -2,11 +2,16 @@ package com.example.aplicaciongestindealumnos;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -20,8 +25,27 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.colors.WebColors;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Inicio extends AppCompatActivity {
     GestorAlumnos gestorAlumnos;
@@ -38,7 +62,7 @@ public class Inicio extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal);
+        setContentView(R.layout.inicio);
 
         gestorAlumnos = new GestorAlumnos();
         gestorAsignaturas = new GestorAsignaturas();
@@ -165,18 +189,18 @@ public class Inicio extends AppCompatActivity {
     }
 
     public void intentEleccionConsultas(View view){
-        Intent i = new Intent(Inicio.this, eleccion_consultas.class);
+        Intent i = new Intent(Inicio.this, Eleccion_consultas.class);
         i.putExtra("correoUsuario", emailDB);
         i.putExtra("listaAlumnos", gestorAlumnos.obtenerTodosAlumnos());
         i.putExtra("listaAsignaturas", gestorAsignaturas.obtenerTodasAsignaturas());
         startActivity(i);
     }
     public void intentEleccionRegistros(View view){
-        Intent i = new Intent(Inicio.this, eleccion_registros.class);
+        Intent i = new Intent(Inicio.this, Eleccion_registros.class);
         i.putExtra("correoUsuario", emailDB);
         i.putExtra("listaAlumnos", gestorAlumnos.obtenerTodosAlumnos());
         i.putExtra("listaAsignaturas", gestorAsignaturas.obtenerTodasAsignaturas());
-        startActivity(i);
+        launcher.launch(i);
     }
     public void intentCalendario(View view) {
         Intent i = new Intent(Inicio.this, Calendario.class);
@@ -184,25 +208,123 @@ public class Inicio extends AppCompatActivity {
         i.putExtra("correoUsuario", emailDB);
         startActivity(i);
     }
+    public void generarInforme(View view) throws FileNotFoundException {
+        String rutaPDF = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+        File file = new File(rutaPDF, "AlumnosCalificaciones.pdf");
+        OutputStream outputStream = new FileOutputStream(file);
 
-    private ActivityResultLauncher<Intent> launcherAlumnos = registerForActivityResult(
+        PdfWriter writer = new PdfWriter(file);
+        PdfDocument pdfDocument = new PdfDocument(writer);
+        Document document = new Document(pdfDocument);
+
+        float columnaWidth[] = {20,200,60,200,80};
+        Table tabla = new Table(columnaWidth);
+
+        //fila 1
+        Drawable logo= getDrawable(R.drawable.logo);
+        Bitmap bitmap = ((BitmapDrawable)logo).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
+        byte[] bitmapData = stream.toByteArray();
+        ImageData imageData = ImageDataFactory.create(bitmapData);
+        Image imagenLogo = new Image(imageData);
+        imagenLogo.setHeight(110);
+
+        tabla.addCell(new Cell(5,1).add(new Paragraph("")).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell(5,1).add(imagenLogo).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell().add(new Paragraph("Fecha:").setBold()).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell().add(new Paragraph("Lunes 14 de marzo 2023")).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell().add(new Paragraph("")).setBold().setBorder(Border.NO_BORDER));
+        //fila 2
+        //tabla.addCell(new Cell().add(new Paragraph("")));
+        tabla.addCell(new Cell().add(new Paragraph("\n")).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+        //fila 3
+        //tabla.addCell(new Cell().add(new Paragraph("")));
+        tabla.addCell(new Cell().add(new Paragraph("\n")).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+        //fila 4
+        //tabla.addCell(new Cell().add(new Paragraph("")));
+        tabla.addCell(new Cell().add(new Paragraph("Profesor:").setBold()).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell().add(new Paragraph("Wilton Barrueta Anaya")).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+        //fila 5
+        //tabla.addCell(new Cell().add(new Paragraph("")));
+        tabla.addCell(new Cell().add(new Paragraph("Centro:").setBold()).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell().add(new Paragraph("IES El Cañaveral")).setBorder(Border.NO_BORDER));
+        tabla.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+
+        float columnaWidth2[] = {212,33,33,33,33,33,33,33,33,45};
+        Table tabla2 = new Table(columnaWidth2);
+        //fila 0
+        Color color2 = WebColors.getRGBColor("#B7D5E5");
+        Color color = new DeviceRgb(183, 213, 229);
+        tabla2.addCell(new Cell().add(new Paragraph("Nombre del alumno").setBackgroundColor(color).setBold()));
+        tabla2.addCell(new Cell(1,8).add(new Paragraph("Calificaciones").setBackgroundColor(color).setBold()));
+        tabla2.addCell(new Cell().add(new Paragraph("Media").setBackgroundColor(color).setBold()));
+        //fila 1
+        ArrayList<Integer> numeros = new ArrayList<>(Arrays.asList(9,1,3,6,2,8,5,7));
+        tabla2.addCell(new Cell().add(new Paragraph("Wilton Marcos Barrueta Anaya")));
+
+        float sum = 0;
+        for (int i = 0; i < numeros.size(); i++) {
+            int numero = numeros.get(i);
+            tabla2.addCell(new Cell().add(new Paragraph(String.valueOf(numero))));
+            sum += numero;
+        }
+        float media = sum / numeros.size();
+        tabla2.addCell(new Cell().add(new Paragraph(String.valueOf(media)).setBold()));
+
+        //fila 2
+        ArrayList<Integer> numeros2 = new ArrayList<>(Arrays.asList(3,7,5,2,7,5,8,5));
+        tabla2.addCell(new Cell().add(new Paragraph("Wilton Marcos Barrueta Anaya")));
+
+        float sum2 = 0;
+        for (int i = 0; i < numeros2.size(); i++) {
+            int numero = numeros2.get(i);
+            tabla2.addCell(new Cell().add(new Paragraph(String.valueOf(numero))));
+            sum2 += numero;
+        }
+        float media2 = sum2 / numeros2.size();
+        tabla2.addCell(new Cell().add(new Paragraph(String.valueOf(media2)).setBold()));
+
+        //fila 3
+        ArrayList<Integer> numeros3 = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8));
+        tabla2.addCell(new Cell().add(new Paragraph("Pedro Guido Garcia Tinoco")));
+
+        float sum3 = 0;
+        for (int i = 0; i < numeros3.size(); i++) {
+            int numero = numeros3.get(i);
+            tabla2.addCell(new Cell().add(new Paragraph(String.valueOf(numero))));
+            sum3 += numero;
+        }
+        float media3 = sum3 / numeros3.size();
+        tabla2.addCell(new Cell().add(new Paragraph(String.valueOf(media3)).setBold()));
+
+        document.add(tabla);
+        document.add(new Paragraph("\n"));
+        document.add(tabla2);
+        document.close();
+        mostrarMensaje("Pdf creado.");
+    }
+
+    private ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
                     Intent data = result.getData();
-                    gestorAlumnos.setListaAlumnos(data.getParcelableArrayListExtra("alumnosDevueltos"));
+                    ResultadoListasDevueltas resultado = data.getParcelableExtra("listasDevueltas");
+                    gestorAlumnos.setListaAlumnos(resultado.getListaObjetos());
+                    gestorAsignaturas.setListaAsignaturas(resultado.getListaStrings());
                 }
             }
     );
-    private ActivityResultLauncher<Intent> launcherAsignaturas = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK) {
-                    Intent data = result.getData();
-                    gestorAlumnos.setListaAlumnos(data.getParcelableArrayListExtra("alumnosDevueltos"));
-                }
-            }
-    );
+
+    private void mostrarMensaje(String mensaje) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
+    }
     @Override
     public void onBackPressed() {
         mostrarCerrarSesion();

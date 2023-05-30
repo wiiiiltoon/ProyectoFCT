@@ -30,7 +30,7 @@ public class ConsultarAsignaturas extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_consultar_asignaturas);
+        setContentView(R.layout.consultas_asignaturas);
 
         relacionXML();
         accionTextoVolver();

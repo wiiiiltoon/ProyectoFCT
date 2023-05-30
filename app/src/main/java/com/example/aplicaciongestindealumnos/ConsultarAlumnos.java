@@ -36,7 +36,7 @@ public class ConsultarAlumnos extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_consultar_alumnos);
+        setContentView(R.layout.consultas_alumnos);
 
         relacionXML();
         accionTextoVolver();
@@ -82,7 +82,7 @@ public class ConsultarAlumnos extends AppCompatActivity {
     }
 
     private void abrirPerfilAlumno(String nombre,String curso, String id, Uri foto, ArrayList asignaturas){
-        Intent i = new Intent(ConsultarAlumnos.this, PerfilAlumno.class);
+        Intent i = new Intent(ConsultarAlumnos.this, AlumnoPerfil.class);
         i.putExtra("emailDB", emailDB);
         i.putExtra("nombre", nombre);
         i.putExtra("curso", curso);

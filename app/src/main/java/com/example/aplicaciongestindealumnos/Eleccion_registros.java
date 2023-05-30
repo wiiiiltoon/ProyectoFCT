@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -24,7 +23,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class eleccion_registros extends AppCompatActivity {
+public class Eleccion_registros extends AppCompatActivity {
     FirebaseFirestore db;
     StorageReference storageRef;
     ArrayList<Alumno> listaAlumnos;
@@ -37,7 +36,7 @@ public class eleccion_registros extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_eleccion_registros);
+        setContentView(R.layout.eleccion_registros);
 
         relacionXML();
         accionTextoVolver();
@@ -59,7 +58,12 @@ public class eleccion_registros extends AppCompatActivity {
     }
 
     public void volverAtras(View view) {
-        onBackPressed();
+        ResultadoListasDevueltas resultado = new ResultadoListasDevueltas(listaAlumnos, listaAsignaturas);
+
+        Intent i = new Intent();
+        i.putExtra("listasDevueltas", resultado);
+        setResult(RESULT_OK, i);
+        finish();
     }
     private void recibirIntent() {
         Intent i = getIntent();
@@ -83,7 +87,6 @@ public class eleccion_registros extends AppCompatActivity {
 
     public void registrarAlumnos(View view) {
         listaAlumnos =  registroAlumnos.mostrarDialog();
-        Log.e("TAG", listaAlumnos.toString());
     }
     public void registrarAsignaturas(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -104,7 +107,6 @@ public class eleccion_registros extends AppCompatActivity {
             }
         });
         builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
-
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -156,5 +158,8 @@ public class eleccion_registros extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         registroAlumnos.onActivityResult(requestCode, resultCode, data);
+    }
+    public void onBackPressed() {
+        volverAtras(null);
     }
 }

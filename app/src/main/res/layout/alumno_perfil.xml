@@ -5,7 +5,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="@color/azulFondo"
-tools:context=".PerfilAlumno">
+tools:context=".AlumnoPerfil">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,8 +34,8 @@ tools:context=".PerfilAlumno">
 
             <ImageView
                 android:id="@+id/imagenAlumnos"
-                android:layout_width="230sp"
-                android:layout_height="200dp"
+                android:layout_width="176sp"
+                android:layout_height="230sp"
                 android:layout_below="@id/textoVolver"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20sp"

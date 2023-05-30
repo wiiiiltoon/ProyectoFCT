@@ -40,12 +40,23 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/textoCalificaciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titulo"
+            android:layout_marginStart="8sp"
+            android:layout_marginBottom="10sp"
+            android:text="Calificaciones del alumno"
+            android:textColor="@color/titulo"
+            android:textSize="20sp" />
+
         <ScrollView
             android:id="@+id/listaAsignatura"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/faltasLayout"
-            android:layout_below="@id/titulo"
+            android:layout_below="@id/textoCalificaciones"
             android:layout_centerHorizontal="true"
             android:background="@drawable/contenedor_campos"
             android:fillViewport="true">

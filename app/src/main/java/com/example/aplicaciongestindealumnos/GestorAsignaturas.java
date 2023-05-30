@@ -21,5 +21,7 @@ public class GestorAsignaturas {
         return listaAsignaturas;
     }
 
-    // Agrega otros métodos necesarios, como obtener asignatura, etc.
+    public void setListaAsignaturas(ArrayList<String> listaAsignaturas) {
+        this.listaAsignaturas = listaAsignaturas;
+    }
 }

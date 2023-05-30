@@ -2,6 +2,10 @@ package com.example.aplicaciongestindealumnos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.UnderlineSpan;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +24,7 @@ public class AlumnoAsignatura extends AppCompatActivity {
     FirebaseFirestore db;
     CollectionReference asignaturasCollection;
     private GridView gridView;
-    private TextView titulo, numFaltas;
+    private TextView titulo, numFaltas, volver;
     private String emailDB, idFirebase, nombreAsignatura;
     private ArrayList<Calificacion> calificaciones;
     private AdaptadorCalificaciones adapter;
@@ -28,9 +32,10 @@ public class AlumnoAsignatura extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alumno_asignatura);
+        setContentView(R.layout.alumno_asignatura);
 
         relacionXML();
+        accionTextoVolver();
         recogerIntent();
         inicilizarFirebase();
 
@@ -47,6 +52,15 @@ public class AlumnoAsignatura extends AppCompatActivity {
         gridView = findViewById(R.id.gridAsignaturas);
         titulo = findViewById(R.id.titulo);
         numFaltas = findViewById(R.id.numeroFaltas);
+        volver = findViewById(R.id.textoVolver);
+    }
+    private void accionTextoVolver() {
+        SpannableString spannableString = new SpannableString("Volver");
+        spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        volver.setText(spannableString);
+    }
+    public void volverAtras(View view) {
+        onBackPressed();
     }
 
     private void recogerIntent() {
@@ -67,7 +81,6 @@ public class AlumnoAsignatura extends AppCompatActivity {
                 for (QueryDocumentSnapshot documentAsignatura : task.getResult()) {
                     if (documentAsignatura.getString("nombre").equals(nombreAsig)) {
                         obtenerCalificaciones(documentAsignatura.getId());
-
                     }
                 }
             } else {
@@ -97,7 +110,7 @@ public class AlumnoAsignatura extends AppCompatActivity {
     private Calificacion crearCalificacionDesdeDocumento(QueryDocumentSnapshot document) {
         Timestamp fecha = document.getTimestamp("fecha");
         String nombre = document.getString("nombre");
-        int nota = document.getLong("nota").intValue();
+        Double nota = document.getDouble("nota");
         return new Calificacion(fecha.toDate(), nombre, nota);
     }
 

@@ -22,7 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 
-public class PerfilAlumno extends AppCompatActivity {
+public class AlumnoPerfil extends AppCompatActivity {
     FirebaseStorage storage;
     TextView campoNombre, campoCurso;
     String nombre, curso, idFirebase;
@@ -36,7 +36,7 @@ public class PerfilAlumno extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_perfil_alumno);
+        setContentView(R.layout.alumno_perfil);
 
         storage = SingletonFirebase.getStorage();
         listaAsignaturas = new ArrayList<>();
@@ -93,7 +93,7 @@ public class PerfilAlumno extends AppCompatActivity {
             params.width = 350;
             button.setLayoutParams(params);
             button.setOnClickListener(v -> {
-                Intent intent = new Intent(PerfilAlumno.this, AlumnoAsignatura.class);
+                Intent intent = new Intent(AlumnoPerfil.this, AlumnoAsignatura.class);
                 intent.putExtra("idFirebase", idFirebase);
                 intent.putExtra("nombreAsignatura", nombre);
                 intent.putExtra("emailDB", emailDB);

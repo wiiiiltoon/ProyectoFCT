@@ -11,9 +11,9 @@ public class Calificacion implements Parcelable {
 
     private Date fecha;
     private String nombreCalificacion;
-    private int calificacion;
+    private Double calificacion;
 
-    public Calificacion(Date fecha, String nombreCalificacion, int calificacion) {
+    public Calificacion(Date fecha, String nombreCalificacion, Double calificacion) {
         this.fecha = fecha;
         this.nombreCalificacion = nombreCalificacion;
         this.calificacion = calificacion;
@@ -21,7 +21,7 @@ public class Calificacion implements Parcelable {
 
     protected Calificacion(Parcel in) {
         nombreCalificacion = in.readString();
-        calificacion = in.readInt();
+        calificacion = in.readDouble();
     }
 
     public static final Creator<Calificacion> CREATOR = new Creator<Calificacion>() {
@@ -52,11 +52,11 @@ public class Calificacion implements Parcelable {
         this.nombreCalificacion = nombreCalificacion;
     }
 
-    public int getCalificacion() {
+    public Double getCalificacion() {
         return calificacion;
     }
 
-    public void setCalificacion(int calificacion) {
+    public void setCalificacion(Double calificacion) {
         this.calificacion = calificacion;
     }
 
@@ -68,6 +68,6 @@ public class Calificacion implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(nombreCalificacion);
-        dest.writeInt(calificacion);
+        dest.writeDouble(calificacion);
     }
 }

@@ -25,7 +25,7 @@ public class InicioSesion extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_iniciosesion);
+        setContentView(R.layout.inicio_sesion);
 
         mAuth = FirebaseAuth.getInstance();
         relacionXML();

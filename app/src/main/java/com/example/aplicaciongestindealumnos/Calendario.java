@@ -3,6 +3,9 @@ package com.example.aplicaciongestindealumnos;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -32,7 +35,7 @@ public class Calendario extends AppCompatActivity implements AdaptadorNotaCalend
     FirebaseFirestore db;
     CollectionReference alumnosRefDB;
     ArrayList<NotaCalendario> listaNotasCalendario;
-    private TextView textoMesAño, notaCalendario;
+    private TextView textoMesAño, notaCalendario, volver;
     private RecyclerView calendarRecyclerView;
     private LocalDate fechaSeleccionada;
     String emailDB;
@@ -41,10 +44,11 @@ public class Calendario extends AppCompatActivity implements AdaptadorNotaCalend
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendario);
+        setContentView(R.layout.calendario);
 
         fechaSeleccionada = LocalDate.now();
         relacionXML();
+        accionTextoVolver();
         recibirIntent();
         inicializarFirebase();
         setMesView();
@@ -53,6 +57,7 @@ public class Calendario extends AppCompatActivity implements AdaptadorNotaCalend
         calendarRecyclerView = findViewById(R.id.calendarRecyclerView);
         textoMesAño = findViewById(R.id.campoMesAño);
         notaCalendario = findViewById(R.id.notas);
+        volver = findViewById(R.id.textoVolver);
     }
     private void recibirIntent(){
         listaNotasCalendario = new ArrayList<>();
@@ -149,7 +154,6 @@ public class Calendario extends AppCompatActivity implements AdaptadorNotaCalend
         });
 
         builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
-
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -188,9 +192,12 @@ public class Calendario extends AppCompatActivity implements AdaptadorNotaCalend
                 })
                 .addOnFailureListener(e -> mostrarMensajeToast("Error al crear el documento"));
     }
-
+    private void accionTextoVolver() {
+        SpannableString spannableString = new SpannableString("Volver");
+        spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        volver.setText(spannableString);
+    }
     public void volverAtras(View view) {
-        // Acción de volver atrás
         onBackPressed();
     }
 
