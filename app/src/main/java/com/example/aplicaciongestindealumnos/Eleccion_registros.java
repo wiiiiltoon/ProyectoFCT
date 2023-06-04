@@ -1,14 +1,11 @@
 package com.example.aplicaciongestindealumnos;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.UnderlineSpan;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,12 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Eleccion_registros extends AppCompatActivity {
     FirebaseFirestore db;
@@ -30,7 +25,7 @@ public class Eleccion_registros extends AppCompatActivity {
     ArrayList<String> listaAsignaturas;
     String emailDB;
     TextView volver;
-    CollectionReference alumnosRefDB, asignaturasRefDB;
+    CollectionReference alumnosCollection, asignaturasCollection;
     private RegistroAlumnos registroAlumnos;
 
     @Override
@@ -42,8 +37,8 @@ public class Eleccion_registros extends AppCompatActivity {
         accionTextoVolver();
         recibirIntent();
         inicializarFirebase();
-        alumnosRefDB = db.collection("users").document(emailDB).collection("alumnos");
-        asignaturasRefDB = db.collection("users").document(emailDB).collection("asignaturas");
+        alumnosCollection = db.collection("users").document(emailDB).collection("alumnos");
+        asignaturasCollection = db.collection("users").document(emailDB).collection("asignaturas");
         registroAlumnos = new RegistroAlumnos(this,listaAlumnos,listaAsignaturas,emailDB);
     }
 
@@ -88,50 +83,7 @@ public class Eleccion_registros extends AppCompatActivity {
     public void registrarAlumnos(View view) {
         listaAlumnos =  registroAlumnos.mostrarDialog();
     }
-    public void registrarAsignaturas(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Añadir asignatura");
 
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View layoutView = inflater.inflate(R.layout.item_asignatura, null);
-        builder.setView(layoutView);
-
-        EditText editTextNombre = layoutView.findViewById(R.id.editTextNombre);
-
-        builder.setPositiveButton("Aceptar", (dialog, which) -> {
-            String nombreAsignatura = editTextNombre.getText().toString().trim();
-            if (!nombreAsignatura.isEmpty()) {
-                verificarExistenciaAsignatura(nombreAsignatura);
-            } else {
-                mostrarMensaje("Ingrese un nombre de asignatura válido");
-            }
-        });
-        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void verificarExistenciaAsignatura(String nombreAsignatura) {
-        asignaturasRefDB.document(nombreAsignatura).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        mostrarMensaje("La asignatura ya existe");
-                    } else {
-                        crearNuevaAsignatura(nombreAsignatura);
-                    }
-                })
-                .addOnFailureListener(e -> mostrarMensaje("Error al verificar la existencia de la asignatura"));
-    }
-
-    private void crearNuevaAsignatura(String nombreAsignatura) {
-        asignaturasRefDB.document(nombreAsignatura)
-                .set(new HashMap<>(), SetOptions.merge())
-                .addOnSuccessListener(aVoid -> {
-                    listaAsignaturas.add(nombreAsignatura);
-                    mostrarMensaje("Asignatura agregada: " + nombreAsignatura);
-                })
-                .addOnFailureListener(e -> mostrarMensaje("Error al agregar asignatura a Firestore"));
-    }
 
     public void registroCalificacion(View view) {
         if(listaAlumnos.size()==0){
@@ -149,6 +101,9 @@ public class Eleccion_registros extends AppCompatActivity {
         }
     }
 
+    public void registroAsignatura(View view) {
+        new RegistroAsignatura(asignaturasCollection,this,listaAsignaturas);
+    }
 
     private void mostrarMensaje(String mensaje) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();

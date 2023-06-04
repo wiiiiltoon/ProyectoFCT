@@ -103,6 +103,13 @@ public class RegistroCalificacion {
             int posicionAlumno = spinnerAlumnos.getSelectedItemPosition();
             if (posicionAlumno > 0) {
                 agregarCalificacion();
+                try {
+                    Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                    field.setAccessible(true);
+                    field.set(dialog, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 mostrarMensaje("Debe elegir un alumno");
                 try {
@@ -143,7 +150,7 @@ public class RegistroCalificacion {
 
         Double nota = Double.parseDouble(notaText);
         if(nota<0||nota>10){
-            mostrarMensaje("Ingrese una nota valida");
+            mostrarMensaje("Ingrese una nota valida (0-10)");
             return;
         }
 

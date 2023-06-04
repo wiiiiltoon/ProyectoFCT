@@ -29,18 +29,18 @@
 
 
     <EditText
-        android:layout_marginTop="8sp"
         android:id="@+id/edit_text_descripcion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Descripción" />
+        android:layout_marginTop="8sp"
+        android:hint="Nombre para calificación" />
 
     <EditText
-        android:layout_marginTop="8sp"
         android:id="@+id/edit_text_nota"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nota"
+        android:layout_marginTop="8sp"
+        android:hint="Nota de calificación"
         android:inputType="numberDecimal" />
 
 </LinearLayout>

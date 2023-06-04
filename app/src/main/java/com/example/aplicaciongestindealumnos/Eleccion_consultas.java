@@ -6,7 +6,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class Eleccion_consultas extends AppCompatActivity {
-
-    Button botonAsiganturas, botonAlumnos;
     ArrayList<Alumno> listaAlumnos;
     ArrayList<String> listaAsignaturas;
     String emailDB;
@@ -31,8 +28,6 @@ public class Eleccion_consultas extends AppCompatActivity {
         recibirIntent();
     }
     private void relacionXML(){
-        botonAlumnos = findViewById(R.id.botonAlumnos);
-        botonAsiganturas = findViewById(R.id.botonAsignaturas);
         volver = findViewById(R.id.textoVolver);
     }
     private void accionTextoVolver() {

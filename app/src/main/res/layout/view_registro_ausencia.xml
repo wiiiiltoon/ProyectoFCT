@@ -51,9 +51,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/negro"
+            android:inputType="number"
             android:text="0"
-            android:inputType="numberDecimal" />
+            android:textColor="@color/negro" />
         <Button
             android:id="@+id/sumarAusencia"
             android:layout_width="wrap_content"

@@ -119,6 +119,13 @@ public class RegistroAusencia {
             if (posicionAlumno > 0) {
                 int numAusenciasNuevo = Integer.parseInt(numAusencias.getText().toString());
                 ingresarNuevaAusencia(numAusenciasNuevo);
+                try {
+                    Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                    field.setAccessible(true);
+                    field.set(dialog, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 mostrarMensaje("Debe elegir un alumno");
                 try {
@@ -130,7 +137,16 @@ public class RegistroAusencia {
                 }
             }
         });
-        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Cancelar", (dialog, which) -> {
+            try {
+                Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                field.setAccessible(true);
+                field.set(dialog, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            dialog.dismiss();
+        });
 
         builder.create().show();
     }

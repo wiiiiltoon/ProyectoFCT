@@ -17,19 +17,22 @@
         <TextView
             android:id="@+id/titulo"
             android:layout_width="wrap_content"
+            android:layout_marginTop="20sp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="@string/bienvenido"
             android:textColor="@color/titulo"
-            android:textSize="40sp" />
+            android:textSize="50sp" />
 
         <TextView
             android:id="@+id/datoNombre"
             android:layout_width="wrap_content"
+            android:background="@drawable/contenedor_campos_azul"
             android:layout_height="wrap_content"
+            android:padding="8sp"
             android:layout_below="@id/titulo"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:textColor="@color/titulo"
             android:textSize="20sp" />
 
@@ -37,6 +40,8 @@
             android:id="@+id/datoCentro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/contenedor_campos_azul"
+            android:padding="8sp"
             android:layout_below="@id/datoNombre"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
@@ -44,58 +49,66 @@
             android:textSize="20sp" />
 
 
-        <Button
-
-            android:id="@+id/botonConsultas"
-            android:layout_width="300dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15sp"
+            android:layout_above="@id/cerrarSesion"
             android:layout_below="@id/datoCentro"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/botones"
-            android:onClick="intentEleccionConsultas"
-            android:text="Consultas"
-            android:textColor="@color/blanco"
-            android:textSize="16sp" />
+            android:gravity="center">
 
-        <Button
-            android:id="@+id/botonRegistro"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/botonConsultas"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/botones"
-            android:onClick="intentEleccionRegistros"
-            android:text="Registros"
-            android:textColor="@color/blanco"
-            android:textSize="16sp" />
-        <Button
-            android:id="@+id/botonCalendario"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/botonRegistro"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/botones"
-            android:onClick="intentCalendario"
-            android:text="@string/calendario"
-            android:textColor="@color/blanco"
-            android:textSize="16sp" />
+            <Button
+                android:id="@+id/botonConsultas"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/botones"
+                android:onClick="intentEleccionConsultas"
+                android:text="Consultas"
+                android:textColor="@color/blanco"
+                android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/botonInforme"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_below="@id/botonCalendario"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/informe"
-            android:onClick="generarInforme"
-            android:paddingHorizontal="20dp"
-            android:text="@string/generar_informe"
-            android:textColor="@color/blanco"
-            android:textSize="16sp" />
+            <Button
+                android:id="@+id/botonRegistro"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/botonConsultas"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/botones"
+                android:onClick="intentEleccionRegistros"
+                android:text="Registros"
+                android:textColor="@color/blanco"
+                android:textSize="16sp" />
+            <Button
+                android:id="@+id/botonCalendario"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/botonRegistro"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/botones"
+                android:onClick="intentCalendario"
+                android:text="@string/calendario"
+                android:textColor="@color/blanco"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/botonInforme"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@id/botonCalendario"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/informe"
+                android:onClick="crearInforme"
+                android:paddingHorizontal="20dp"
+                android:text="@string/generar_informe"
+                android:textColor="@color/blanco"
+                android:textSize="16sp"
+                android:layout_marginBottom="100sp"/>
+        </RelativeLayout>
+
 
         <Button
             android:id="@+id/cerrarSesion"

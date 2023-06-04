@@ -63,16 +63,16 @@
                     android:layout_marginRight="8sp"
                     android:orientation="vertical">
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/botonAlumnos"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
+                        android:src="@drawable/add_alumnos"
                         android:background="@drawable/botones"
                         android:onClick="registrarAlumnos"
-                        android:text="Alumnos"
-                        android:textColor="@color/blanco"
-                        android:textSize="16sp" />
+                        android:scaleType="fitCenter"
+                        android:padding="50dp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -91,16 +91,16 @@
                     android:layout_marginLeft="8sp"
                     android:orientation="vertical">
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/botonAsignaturas"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
+                        android:src="@drawable/add_asignatura"
                         android:background="@drawable/botones"
-                        android:onClick="registrarAsignaturas"
-                        android:text="Asignaturas"
-                        android:textColor="@color/blanco"
-                        android:textSize="16sp" />
+                        android:onClick="registroAsignatura"
+                        android:scaleType="fitCenter"
+                        android:padding="50dp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -114,7 +114,6 @@
 
             </LinearLayout>
 
-            <!-- Segunda fila -->
             <LinearLayout
                 android:id="@+id/segunda_fila"
                 android:layout_width="match_parent"
@@ -132,16 +131,16 @@
                     android:layout_marginRight="8sp"
                     android:orientation="vertical">
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/botonCalificaciones"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
+                        android:src="@drawable/add_calificacion"
                         android:background="@drawable/botones"
                         android:onClick="registroCalificacion"
-                        android:text="Calificaciones"
-                        android:textColor="@color/blanco"
-                        android:textSize="16sp" />
+                        android:scaleType="fitCenter"
+                        android:padding="50dp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -160,16 +159,16 @@
                     android:layout_marginLeft="8sp"
                     android:orientation="vertical">
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/botonAusencias"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
+                        android:src="@drawable/add_ausencia"
                         android:background="@drawable/botones"
                         android:onClick="registroAusencia"
-                        android:text="Ausencias"
-                        android:textColor="@color/blanco"
-                        android:textSize="16sp" />
+                        android:scaleType="fitCenter"
+                        android:padding="50dp" />
 
                     <TextView
                         android:layout_width="match_parent"

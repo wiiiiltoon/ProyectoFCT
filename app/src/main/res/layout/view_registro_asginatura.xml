@@ -9,6 +9,6 @@
         android:id="@+id/editTextNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Asignatura" />
+        android:hint="Nombre de la asignatura" />
 
 </LinearLayout>

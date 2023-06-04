@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
@@ -28,6 +29,7 @@ import com.google.firebase.storage.UploadTask;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -124,14 +126,37 @@ public class RegistroAlumnos {
 
             if (nombre.isEmpty() || anio.isEmpty()) {
                 mostrarMensaje("Complete los campos requeridos");
+                try {
+                    Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                    field.setAccessible(true);
+                    field.set(dialog, false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
+                try {
+                    Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                    field.setAccessible(true);
+                    field.set(dialog, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 String nuevoID = alumnosRefDB.document().getId();
                 String nombreImagen = generarNombreImagen();
                 StorageReference imageRef = storageRef.child(nombreImagen);
                 subirImagenFirebase(imageRef, nuevoID, nombre, curso, listaAsignaturaAlumno);
             }
         });
-        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Cancelar", (dialog, which) -> {
+            try {
+                Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                field.setAccessible(true);
+                field.set(dialog, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            dialog.dismiss();
+        });
 
         builder.show();
     }
@@ -167,7 +192,8 @@ public class RegistroAlumnos {
         alumnosRefDB.document(nuevoID).set(nuevoAlumnoMap)
                 .addOnSuccessListener(aVoid -> {
                     for (String asignatura : asignaturasAlumno) {
-                        alumnosRefDB.document(nuevoID).collection("asignaturas").add(createAsignaturaData(asignatura))
+                        DocumentReference asignaturaRef = alumnosRefDB.document(nuevoID).collection("asignaturas").document(asignatura);
+                        asignaturaRef.set(createAsignaturaData(asignatura))
                                 .addOnSuccessListener(documentReference -> {
                                 })
                                 .addOnFailureListener(e -> mostrarMensaje("Error al agregar asignatura a Firestore"));
