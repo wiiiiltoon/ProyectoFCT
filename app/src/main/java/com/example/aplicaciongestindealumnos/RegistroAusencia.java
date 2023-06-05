@@ -70,7 +70,7 @@ public class RegistroAusencia {
 
     public void construirDialog(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Agregar Calificación");
+        builder.setTitle("Agregar ausencia");
 
         List<String> nombresAlumnos = new ArrayList<>();
         nombresAlumnos.add("Seleccione un alumno...");
@@ -118,13 +118,24 @@ public class RegistroAusencia {
             int posicionAlumno = spinnerAlumnos.getSelectedItemPosition();
             if (posicionAlumno > 0) {
                 int numAusenciasNuevo = Integer.parseInt(numAusencias.getText().toString());
-                ingresarNuevaAusencia(numAusenciasNuevo);
-                try {
-                    Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
-                    field.setAccessible(true);
-                    field.set(dialog, true);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (numAusenciasNuevo < 0) {
+                    mostrarMensaje("No se puede ingresar un número negativo");
+                    try {
+                        Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                        field.setAccessible(true);
+                        field.set(dialog, false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    ingresarNuevaAusencia(numAusenciasNuevo);
+                    try {
+                        Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                        field.setAccessible(true);
+                        field.set(dialog, true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 mostrarMensaje("Debe elegir un alumno");
@@ -153,7 +164,7 @@ public class RegistroAusencia {
 
     private void cargarNumAusencia() {
         int posicionAlumno = spinnerAlumnos.getSelectedItemPosition();
-        if (posicionAlumno > 0) { // Seleccionó un alumno válido
+        if (posicionAlumno > 0) {
             Alumno alumno = listaAlumnos.get(posicionAlumno - 1);
             String idFireBaseAlumno = alumno.getIdFireBase();
             String asignatura = (String) spinnerAsignaturas.getSelectedItem();

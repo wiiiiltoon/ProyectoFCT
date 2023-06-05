@@ -39,7 +39,12 @@ public class ConsultarAsignaturas extends AppCompatActivity {
         accionVolver();
         construirListViewAlumnos();
     }
-
+    public void volverAtras(View view) {
+        Intent i = new Intent();
+        i.putStringArrayListExtra("listasDevueltas", listaAsignaturas);
+        setResult(RESULT_OK, i);
+        finish();
+    }
     private void relacionXML() {
         listView = findViewById(R.id.listaAsignaturas);
         volver = findViewById(R.id.textoVolver);
@@ -49,10 +54,6 @@ public class ConsultarAsignaturas extends AppCompatActivity {
         SpannableString spannableString = new SpannableString("Volver");
         spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         volver.setText(spannableString);
-    }
-
-    public void volverAtras(View view) {
-        onBackPressed();
     }
 
     private void recibirIntent() {
@@ -100,5 +101,8 @@ public class ConsultarAsignaturas extends AppCompatActivity {
 
     private void mostrarMensaje(String mensaje) {
         Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_SHORT).show();
+    }
+    public void onBackPressed() {
+        volverAtras(null);
     }
 }

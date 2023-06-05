@@ -114,7 +114,7 @@ public class RegistroAlumnos {
             }
         }
 
-        uriElegidaCliente = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.drawable.logo);
+        uriElegidaCliente = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.drawable.logoicono);
 
         botonImagen.setOnClickListener(v -> seleccionarImagen());
 
@@ -210,35 +210,6 @@ public class RegistroAlumnos {
         asignaturaMap.put("faltas", 0);
         return asignaturaMap;
     }
-
-    //eliminar alumno
-/*
-    private void accionPulsarAlumno() {
-        listViewAlumnos.setOnItemClickListener((parent, view, position, id) -> mostrarEliminarAlumno(position));
-    }
-
-    private void mostrarEliminarAlumno(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(RegistroAlumnos.this)
-                .setTitle("Eliminar alumno")
-                .setMessage("¿Estás seguro de que quieres eliminar este alumno?")
-                .setPositiveButton("Eliminar", (dialog, which) -> eliminarAlumno(position))
-                .setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
-        builder.show();
-    }
-
-    private void eliminarAlumno(int position) {
-        Alumno alumnoSeleccionado = (Alumno) adaptadorAlumnos.getItem(position);
-        String idAlumno = alumnoSeleccionado.getIdFireBase();
-        DocumentReference alumnoRef = db.collection("users").document(emailDB).collection("alumnos").document(idAlumno);
-        alumnoRef.delete()
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(getApplicationContext(), "Eliminado correctamente", Toast.LENGTH_SHORT).show();
-                    adaptadorAlumnos.remove(alumnoSeleccionado);
-                    adaptadorAlumnos.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "No se pudo eliminar el alumno", Toast.LENGTH_SHORT).show());
-    }
-*/
 
     private void mostrarMensaje(String mensaje) {
         Toast.makeText(context, mensaje, Toast.LENGTH_SHORT).show();

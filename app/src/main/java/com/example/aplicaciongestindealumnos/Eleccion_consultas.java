@@ -8,6 +8,8 @@ import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -36,7 +38,11 @@ public class Eleccion_consultas extends AppCompatActivity {
         volver.setText(spannableString);
     }
     public void volverAtras(View view) {
-        onBackPressed();
+        ResultadoListasDevueltas resultado = new ResultadoListasDevueltas(listaAlumnos, listaAsignaturas);
+        Intent i = new Intent();
+        i.putExtra("listasDevueltas", resultado);
+        setResult(RESULT_OK, i);
+        finish();
     }
     private void recibirIntent(){
         Intent i = getIntent();
@@ -49,13 +55,34 @@ public class Eleccion_consultas extends AppCompatActivity {
         Intent i = new Intent(Eleccion_consultas.this, ConsultarAlumnos.class);
         i.putExtra("correoUsuario", emailDB);
         i.putExtra("listaAlumnos", listaAlumnos);
-        startActivity(i);
+        launcherAlumnos.launch(i);
     }
 
     public void intentConsultarAsignaturas(View view) {
         Intent i = new Intent(Eleccion_consultas.this, ConsultarAsignaturas.class);
         i.putExtra("correoUsuario", emailDB);
         i.putExtra("listaAsignaturas", listaAsignaturas);
-        startActivity(i);
+        launcherAsignaturas.launch(i);
+    }
+    private ActivityResultLauncher<Intent> launcherAsignaturas = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    listaAsignaturas = data.getStringArrayListExtra("listasDevueltas");
+                }
+            }
+    );
+    private ActivityResultLauncher<Intent> launcherAlumnos = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    listaAlumnos = data.getParcelableArrayListExtra("listasDevueltas");
+                }
+            }
+    );
+    public void onBackPressed() {
+        volverAtras(null);
     }
 }

@@ -7,99 +7,114 @@ android:layout_height="match_parent"
 android:background="@color/azulFondo"
 tools:context=".AlumnoPerfil">
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:padding="40dp">
 
         <RelativeLayout
-            android:id="@+id/relativeLayout"
+            android:id="@+id/botonesSuperiores"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="40dp">
+            android:layout_marginBottom="10sp">
 
             <TextView
+                android:layout_marginTop="3dp"
                 android:id="@+id/textoVolver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginBottom="10sp"
-                android:clickable="true"
-                android:onClick="volverAtras"
                 android:text="@string/volver"
                 android:textColor="#858585"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" />
 
-            <ImageView
-                android:id="@+id/imagenAlumnos"
-                android:layout_width="176sp"
-                android:layout_height="230sp"
-                android:layout_below="@id/textoVolver"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20sp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/marco_imagen_alumno"
-                android:contentDescription="@string/imagen_alumno"
-                android:padding="5sp"
-                android:src="@drawable/alumno" />
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@color/azulFondo"
+                android:src="@drawable/eliminar"
+                android:scaleType="fitCenter"
+                android:onClick="mostrarEliminarAlumno"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true" />
 
-            <TextView
+        </RelativeLayout>
 
-                android:id="@+id/datoNombre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="7sp"
-                android:paddingBottom="7sp"
-                android:paddingLeft="10sp"
-                android:paddingRight="10sp"
-                android:background="@drawable/listaformato"
-                android:layout_below="@id/imagenAlumnos"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="20sp"
-                android:layout_marginTop="20sp"
-                android:text="Noelia Valladar Aroca"
-                android:textAllCaps="false"
-                android:textColor="@color/titulo"
-                android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/datoCurso"
-                android:paddingTop="7sp"
-                android:paddingBottom="7sp"
-                android:paddingLeft="10sp"
-                android:paddingRight="10sp"
-                android:layout_width="wrap_content"
-                android:background="@drawable/listaformato"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/datoNombre"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:text="2º Bachillerato"
-                android:textAllCaps="false"
-                android:textColor="@color/titulo"
-                android:textSize="20sp" />
+        <ImageView
+            android:id="@+id/imagenAlumnos"
+            android:layout_width="176sp"
+            android:layout_height="230sp"
+            android:layout_below="@id/botonesSuperiores"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20sp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/marco_imagen_alumno"
+            android:contentDescription="@string/imagen_alumno"
+            android:padding="5sp"
+            android:src="@drawable/alumno" />
+
+        <TextView
+
+            android:id="@+id/datoNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="7sp"
+            android:paddingBottom="7sp"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"
+            android:background="@drawable/listaformato"
+            android:layout_below="@id/imagenAlumnos"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="20sp"
+            android:layout_marginTop="20sp"
+            android:text="Noelia Valladar Aroca"
+            android:textAllCaps="false"
+            android:textColor="@color/titulo"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/datoCurso"
+            android:paddingTop="7sp"
+            android:paddingBottom="7sp"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"
+            android:layout_width="wrap_content"
+            android:background="@drawable/listaformato"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/datoNombre"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="2º Bachillerato"
+            android:textAllCaps="false"
+            android:textColor="@color/titulo"
+            android:textSize="20sp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/datoCurso"
+            android:layout_marginTop="30dp"
+            android:fillViewport="true">
 
             <LinearLayout
-                android:id="@+id/contAsignaturas"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/datoCurso"
-                android:gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:background="@drawable/listaformato"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textoAsignaturas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/datoCurso"
                     android:text="Asignaturas"
-                    android:textAllCaps="false"
-                    android:textStyle="bold"
                     android:layout_marginTop="20sp"
+                    android:textStyle="bold"
                     android:textColor="@color/titulo"
                     android:textSize="20sp" />
 
@@ -107,8 +122,6 @@ tools:context=".AlumnoPerfil">
                     android:id="@+id/gridAsignaturas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/textoAsignaturas"
-                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="20sp"
                     android:alignmentMode="alignMargins"
                     android:layout_marginBottom="20sp"
@@ -119,8 +132,8 @@ tools:context=".AlumnoPerfil">
 
                 </GridLayout>
             </LinearLayout>
-        </RelativeLayout>
 
-    </ScrollView>
+        </ScrollView>
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

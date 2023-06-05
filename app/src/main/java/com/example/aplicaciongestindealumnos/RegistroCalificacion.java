@@ -64,7 +64,7 @@ public class RegistroCalificacion {
 
     public void registrarCalificacion(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Agregar Calificación");
+        builder.setTitle("Agregar calificación");
 
         List<String> nombresAlumnos = new ArrayList<>();
         nombresAlumnos.add("Seleccione un alumno...");

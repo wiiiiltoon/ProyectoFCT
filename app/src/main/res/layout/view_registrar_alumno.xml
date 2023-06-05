@@ -1,65 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="350sp"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:padding="20dp">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <ImageView
-        android:id="@+id/imagenRecortada"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/logo"
-
-        android:adjustViewBounds="true" />
-
-    <Button
-        android:id="@+id/botonImagen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Seleccionar imagen" />
-
-    <EditText
-        android:layout_marginTop="8sp"
-        android:id="@+id/campoNombre"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre y apellidos" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="20dp">
 
-    <EditText
-        android:id="@+id/campoAñoCurso"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8sp"
-        android:hint="Año del curso"
-        android:inputType="number" />
+        <ImageView
+            android:id="@+id/imagenRecortada"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/logoicono"
+            android:adjustViewBounds="true" />
 
-    <Spinner
-        android:layout_marginTop="8sp"
-        android:id="@+id/spinnerNivelEducativo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <Button
+            android:layout_marginTop="30dp"
+            android:id="@+id/botonImagen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar imagen" />
 
-    <ScrollView
-        android:layout_marginTop="8sp"
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true">
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/campoNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:hint="Nombre y apellidos" />
 
-            <GridLayout
-                android:id="@+id/contenedorAsignaturas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="3" />
+        <EditText
+            android:id="@+id/campoAñoCurso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8sp"
+            android:hint="Año del curso"
+            android:inputType="number" />
 
-        </LinearLayout>
+        <Spinner
+            android:id="@+id/spinnerNivelEducativo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8sp" />
 
-    </ScrollView>
-</LinearLayout>
+        <GridLayout
+            android:id="@+id/contenedorAsignaturas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3" />
+
+    </LinearLayout>
+
+</ScrollView>

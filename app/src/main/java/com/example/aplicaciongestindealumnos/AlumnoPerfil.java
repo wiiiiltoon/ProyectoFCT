@@ -1,8 +1,8 @@
 package com.example.aplicaciongestindealumnos;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -14,22 +14,27 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class AlumnoPerfil extends AppCompatActivity {
+    FirebaseFirestore db;
     FirebaseStorage storage;
     TextView campoNombre, campoCurso;
     String nombre, curso, idFirebase;
     GridLayout gridAsignaturas;
     ArrayList<String> listaAsignaturas;
+    ArrayList<Alumno> listaAlumnos;
     ImageView foto;
-    Uri uriFoto;
     String fotografia, emailDB;
     TextView volver;
 
@@ -40,6 +45,7 @@ public class AlumnoPerfil extends AppCompatActivity {
 
         storage = SingletonFirebase.getStorage();
         listaAsignaturas = new ArrayList<>();
+        db = SingletonFirebase.getFireBase();
 
         relacionXML();
         recibirIntent();
@@ -59,6 +65,7 @@ public class AlumnoPerfil extends AppCompatActivity {
     private void recibirIntent() {
         Intent i = getIntent();
         listaAsignaturas = i.getStringArrayListExtra("listaAsignaturas");
+        listaAlumnos = i.getParcelableArrayListExtra("listaAlumnos");
         emailDB = i.getStringExtra("emailDB");
         nombre = i.getStringExtra("nombre");
         curso = i.getStringExtra("curso");
@@ -90,7 +97,7 @@ public class AlumnoPerfil extends AppCompatActivity {
             button.setBackgroundResource(R.drawable.botones);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setGravity(Gravity.CENTER);
-            params.width = 350;
+            params.width = 380;
             button.setLayoutParams(params);
             button.setOnClickListener(v -> {
                 Intent intent = new Intent(AlumnoPerfil.this, AlumnoAsignatura.class);
@@ -103,9 +110,49 @@ public class AlumnoPerfil extends AppCompatActivity {
             gridLayout.addView(button);
         }
     }
+    public void mostrarEliminarAlumno(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("Eliminar alumno")
+                .setMessage("¿Estás seguro de que quieres eliminar este alumno?")
+                .setPositiveButton("Eliminar", (dialog, which) -> eliminarAlumno(idFirebase))
+                .setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
 
+    private void eliminarAlumno(String id) {
+        DocumentReference alumnoRef = db.collection("users").document(emailDB).collection("alumnos").document(id);
+        alumnoRef.delete()
+                .addOnSuccessListener(aVoid -> {
+                    boolean eliminado = false;
+                    Iterator<Alumno> iterator = listaAlumnos.iterator();
+                    while (iterator.hasNext()) {
+                        Alumno alumno = iterator.next();
+                        if (alumno.getIdFireBase().equals(id)) {
+                            iterator.remove();
+                            eliminado = true;
+                        }
+                    }
+                    if (eliminado) {
+                        mostrarMensaje("Alumnos eliminados correctamente");
+                    } else {
+                        mostrarMensaje("No se encontraron alumnos con ese ID");
+                    }
+                    volverAtras(null);
+                })
+                .addOnFailureListener(e -> mostrarMensaje("No se pudo eliminar el alumno"));
+    }
 
-    public void volverAtras(View view) {
-        onBackPressed();
+    private void mostrarMensaje(String mensaje){
+        Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_SHORT).show();
+    }
+
+    public void volverAtras(View view){
+        Intent i = new Intent();
+        i.putParcelableArrayListExtra("listasDevueltas", listaAlumnos);
+        setResult(RESULT_OK, i);
+        finish();
+    }
+    public void onBackPressed() {
+        volverAtras(null);
     }
 }

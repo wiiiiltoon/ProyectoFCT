@@ -39,13 +39,24 @@ public class RegistroAsignatura {
         builder.setPositiveButton("Aceptar", (dialog, which) -> {
             String nombreAsignatura = editTextNombre.getText().toString().trim();
             if (!nombreAsignatura.isEmpty()) {
-                verificarExistenciaAsignatura(nombreAsignatura);
-                try {
-                    Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
-                    field.setAccessible(true);
-                    field.set(dialog, true);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (nombreAsignatura.length() <= 11) {
+                    verificarExistenciaAsignatura(nombreAsignatura);
+                    try {
+                        Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                        field.setAccessible(true);
+                        field.set(dialog, true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    mostrarMensaje("El nombre de la asignatura no puede tener más de 11 letras");
+                    try {
+                        Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                        field.setAccessible(true);
+                        field.set(dialog, false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 mostrarMensaje("Debe ingresar un nombre de asignatura");

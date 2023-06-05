@@ -22,6 +22,10 @@ public class AdaptadorAlumnos extends BaseAdapter {
         this.listaAlumnos = lista;
     }
 
+    public void setListaAlumnos(ArrayList<Alumno> lista) {
+        this.listaAlumnos = lista;
+        notifyDataSetChanged();
+    }
     @Override
     public int getCount() {
         return listaAlumnos.size();

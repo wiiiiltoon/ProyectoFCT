@@ -1,5 +1,5 @@
 <resources>
-    <string name="gestion_alumnos">Gestión de alumnos</string>
+    <string name="gestion_alumnos">TeachAssist</string>
     <string name="bienvenido">Bienvenido/a</string>
     <string name="consulta_alumnos">Consulta de alumnos</string>
     <string name="registro_alumnos">Registro de alumnos</string>

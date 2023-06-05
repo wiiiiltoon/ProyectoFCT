@@ -183,7 +183,7 @@ public class Inicio extends AppCompatActivity {
         i.putExtra("correoUsuario", emailDB);
         i.putExtra("listaAlumnos", gestorAlumnos.obtenerTodosAlumnos());
         i.putExtra("listaAsignaturas", gestorAsignaturas.obtenerTodasAsignaturas());
-        startActivity(i);
+        launcher.launch(i);
     }
 
     public void intentEleccionRegistros(View view) {

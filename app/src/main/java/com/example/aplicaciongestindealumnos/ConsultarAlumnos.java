@@ -10,11 +10,10 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
@@ -22,10 +21,6 @@ import java.util.ArrayList;
 
 
 public class ConsultarAlumnos extends AppCompatActivity {
-    private FirebaseFirestore db;
-    private FirebaseStorage storage;
-    private CollectionReference alumnosRefDB;
-    private Uri uriElegidaCliente;
     private StorageReference storageRef;
     private ArrayList<Alumno> listaAlumnos;
     private ListView listViewAlumnos;
@@ -50,22 +45,23 @@ public class ConsultarAlumnos extends AppCompatActivity {
         listViewAlumnos = findViewById(R.id.listaAlumnos);
         volver = findViewById(R.id.textoVolver);
     }
+
     private void accionTextoVolver() {
         SpannableString spannableString = new SpannableString("Volver");
         spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         volver.setText(spannableString);
     }
+
     private void recibirIntent() {
         Intent i = getIntent();
         emailDB = i.getStringExtra("correoUsuario");
         listaAlumnos = i.getParcelableArrayListExtra("listaAlumnos");
     }
+
     private void inicializarFirebase() {
-        db = SingletonFirebase.getFireBase();
-        storage = SingletonFirebase.getStorage();
         storageRef = SingletonFirebase.getReferenciaFotos();
-        alumnosRefDB = db.collection("users").document(emailDB).collection("alumnos");
     }
+
     private void construirListViewAlumnos() {
         adaptadorAlumnos = new AdaptadorAlumnos(ConsultarAlumnos.this, listaAlumnos);
         listViewAlumnos.setAdapter(adaptadorAlumnos);
@@ -77,20 +73,22 @@ public class ConsultarAlumnos extends AppCompatActivity {
             ArrayList asignaturas = alumnoSeleccionado.getAsignaturas();
             Uri foto = alumnoSeleccionado.getUrlFoto();
 
-            abrirPerfilAlumno(nombre,curso,idAlumno,foto,asignaturas);
+            abrirPerfilAlumno(nombre, curso, idAlumno, foto, asignaturas);
         });
     }
 
-    private void abrirPerfilAlumno(String nombre,String curso, String id, Uri foto, ArrayList asignaturas){
+    private void abrirPerfilAlumno(String nombre, String curso, String id, Uri foto, ArrayList asignaturas) {
         Intent i = new Intent(ConsultarAlumnos.this, AlumnoPerfil.class);
         i.putExtra("emailDB", emailDB);
         i.putExtra("nombre", nombre);
         i.putExtra("curso", curso);
         i.putExtra("idFirebase", id);
         i.putExtra("foto", foto.toString());
-        i.putStringArrayListExtra("listaAsignaturas",asignaturas);
-        startActivity(i);
+        i.putStringArrayListExtra("listaAsignaturas", asignaturas);
+        i.putParcelableArrayListExtra("listaAlumnos", listaAlumnos);
+        launcherAlumnos.launch(i);
     }
+
     private void crearReferenciaStorage() {
         storageRef.getMetadata().addOnSuccessListener(storageMetadata -> {
         }).addOnFailureListener(exception -> {
@@ -101,8 +99,24 @@ public class ConsultarAlumnos extends AppCompatActivity {
             }
         });
     }
+    private ActivityResultLauncher<Intent> launcherAlumnos = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    listaAlumnos = data.getParcelableArrayListExtra("listasDevueltas");
+                    adaptadorAlumnos.setListaAlumnos(listaAlumnos);
+                }
+            }
+    );
 
-    public void volverAtras(View view) {
-        onBackPressed();
+    public void volverAtras(View view){
+        Intent i = new Intent();
+        i.putParcelableArrayListExtra("listasDevueltas", listaAlumnos);
+        setResult(RESULT_OK, i);
+        finish();
+    }
+    public void onBackPressed() {
+        volverAtras(null);
     }
 }
